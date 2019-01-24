@@ -1,0 +1,34 @@
+//Calculate a+b and output the sum in standard format -- that is, the digits must be separated
+//into groups of three by commas (unless there are less than four digits).
+//没啥难的，别犯错就好
+#include<iostream>
+using namespace std;
+int main(){
+	int a,b;
+	cin>>a>>b;
+	int c=a+b;
+	int cnt=0;
+	int n[7];
+	char ch;
+	if(c<0){
+		cout<<'-';
+		c=-c;
+	}
+	if(c==0){
+		cout<<'0';
+	}
+	while(c>0){
+		n[cnt]=c%10;
+		c/=10;
+		cnt++;
+	}
+	for(int i=cnt-1;i>=0;i--){
+		ch=n[i]+'0';
+		cout<<ch;
+		if(i>0&&i%3==0){
+			cout<<',';
+		}
+	}
+	return 0;
+}
+ 
