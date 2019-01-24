@@ -1,0 +1,67 @@
+//As an emergency rescue team leader of a city, you are given a special map of your country. The map shows several
+//scattered cities connected by some roads. Amount of rescue teams in each city and the length of each road between 
+//any pair of cities are marked on the map. When there is an emergency call to you from some other city, your job is 
+//to lead your men to the place as quickly as possible, and at the mean time, call up as many hands on the way as possible.
+//找最短路径的数量和最多救援队员，DFS遍历的同时更新即可
+#include<iostream>
+using namespace std;
+const int maxn=510; 
+int road=1000000;
+int people=0;
+int sh=0;
+int N,M,C1,C2;
+int num[maxn];
+int dis[maxn][maxn];
+int v[maxn];
+void DFS(int cur,int length,int men){
+	if(length>road){
+		return;
+	}
+	if(cur==C2){
+		if(length<road){
+			road=length;
+			sh=1;
+			people=men;
+		}
+		else if(length==road){
+			sh++;
+			if(men>people){
+				people=men;
+			}
+		}
+		return;
+	}
+	v[cur]=1;
+	for(int i=0;i<N;i++){
+		if(v[i]==1||dis[cur][i]==0){
+			continue;
+		}
+		DFS(i,length+dis[cur][i],men+num[i]);
+	}
+	v[cur]=0;
+}
+int main(){
+	cin>>N>>M>>C1>>C2;
+	for(int i=0;i<N;i++){
+		int res;
+		cin>>res;
+		num[i]=res;
+	}
+	for(int i=0;i<maxn;i++){
+		for(int j=0;j<maxn;j++){
+			dis[i][j]=0;
+		}
+	}
+	for(int i=0;i<M;i++){
+		int a,b,l;
+		cin>>a>>b>>l;
+		dis[a][b]=l;
+		dis[b][a]=l;
+	}
+	for(int i=0;i<maxn;i++){
+		v[i]=0;
+	}
+	DFS(C1,0,num[C1]);
+	cout<<sh<<' '<<people;
+	return 0;
+} 
