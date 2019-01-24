@@ -1,0 +1,54 @@
+//A family hierarchy is usually presented by a pedigree tree. Your job is to count those family members who have no child.
+//输出每层的叶节点数量
+//DFS遍历的同时更新最高层数和每层的叶节点数量
+#include<iostream>
+using namespace std;
+const int maxn=110;
+int inf[maxn][maxn];
+int isleaf[maxn];
+int out[maxn];
+int maxlevel=0;
+int N,M;
+void DFS(int cur,int level){
+	if(level>maxlevel){
+		maxlevel=level;
+	}
+	if(isleaf[cur]==0){
+		out[level]++;
+		return;
+	}
+	if(isleaf[cur]!=0){
+		for(int i=0;i<isleaf[cur];i++){
+			DFS(inf[cur][i],level+1);
+		}
+	}
+}
+int main(){
+	cin>>N>>M;
+	for(int i=0;i<maxn;i++){
+		isleaf[i]=0;
+	}
+	for(int i=0;i<M;i++){
+		int id,k;
+		cin>>id>>k;
+		isleaf[id]=k;
+		for(int j=0;j<k;j++){
+			int idt;
+			cin>>idt;
+			inf[id][j]=idt;
+		}
+	}
+	for(int i=0;i<maxn;i++){
+		out[i]=0;
+	}
+	DFS(1,1);
+	for(int i=1;i<=maxlevel;i++){
+		if(i==1){
+			cout<<out[i];
+		}
+		else{
+			cout<<' '<<out[i];
+		}
+	}
+	return 0;
+}
