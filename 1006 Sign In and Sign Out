@@ -1,0 +1,28 @@
+//At the beginning of every day, the first person who signs in the computer room will unlock the door, and
+//the last one who signs out will lock the door. Given the records of signing in's and out's, you are supposed
+//to find the ones who have unlocked and locked the door on that day.
+//主要是输入的问题，全部按字符串输入即可，用strcmp可以比较轻松地比较时间
+#include<iostream>
+#include<cstring>
+using namespace std;
+int main(){
+	char earlyid[16],lateid[16],id[16];
+	int m;
+	cin>>m;
+	char earliest[10]="23:59:59";
+	char latest[10]="00:00:00";
+	char timein[10],timeout[10];
+	for(int i=0;i<m;i++){
+		cin>>id>>timein>>timeout;
+		if(strcmp(timein,earliest)<0){
+			strcpy(earliest,timein);
+			strcpy(earlyid,id);
+		}
+		if(strcmp(timeout,latest)>0){
+			strcpy(latest,timeout);
+			strcpy(lateid,id);
+		}
+	}
+	cout<<earlyid<<" "<<lateid;
+	return 0;
+} 
