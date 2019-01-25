@@ -1,0 +1,43 @@
+//题目太长，不打了，核心思路是写个递归函数逐层深入，同时更新各个需要输出的参数
+#include<iostream>
+using namespace std;
+int num[10000];
+int maxs=-1;
+int in;
+int out;
+int m;
+void search(int begin,int cur,int sum){
+	if(sum>maxs){
+		maxs=sum;
+		in=num[begin];
+		out=num[cur];
+	}
+	if(cur==m-1){
+		return;
+	}
+	search(begin,cur+1,sum+num[cur+1]);
+}
+int main(){
+	cin>>m;
+	int flag=1;
+	for(int i=0;i<m;i++){
+		int k;
+		cin>>k;
+		if(k>=0){
+			flag=0;
+		} 
+		num[i]=k;
+	}
+	if(flag==1){
+		cout<<"0"<<" "<<num[0]<<" "<<num[m-1];
+	}
+	if(flag==0){
+		for(int i=0;i<m;i++){
+			if(num[i]>=0){
+				search(i,i,num[i]);
+			}
+		}
+		cout<<maxs<<" "<<in<<" "<<out;
+	}
+	return 0;
+}
