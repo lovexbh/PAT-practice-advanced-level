@@ -1,0 +1,39 @@
+//Given a non-negative integer N, your task is to compute the sum of all the digits of N, and output every digit of the sum in English.
+//逐位求和然后用switch对应每位数字和英文即可
+#include<iostream>
+using namespace std;
+int main(){
+	char c;
+	int sum=0;
+	while(cin>>c){
+		sum+=c-'0';
+	}
+	if(sum==0){
+		cout<<"zero";
+	}
+	int cnt=0;
+	int num[5];
+	while(sum>0){
+		num[cnt]=sum%10;
+		sum/=10;
+		cnt++;
+	}
+	for(int i=cnt-1;i>=0;i--){
+		if(i!=cnt-1){
+			cout<<' ';
+		}
+		switch(num[i]){
+			case 0: cout<<"zero";break;
+			case 1: cout<<"one";break;
+			case 2: cout<<"two";break;
+			case 3: cout<<"three";break;
+			case 4: cout<<"four";break;
+			case 5: cout<<"five";break;
+			case 6: cout<<"six";break;
+			case 7: cout<<"seven";break;
+			case 8: cout<<"eight";break;
+			case 9: cout<<"nine";break;
+		}
+	}
+	return 0;
+} 
