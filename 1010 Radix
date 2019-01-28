@@ -1,0 +1,87 @@
+//Given a pair of positive integers, for example, 6 and 110, can this equation 6 = 110 be true? The answer is yes,
+//if 6 is a decimal number and 110 is a binary number.Now for any pair of positive integers N1 and N2, your task is 
+//to find the radix of one number while that of the other is given.
+//给2个数，一个已知进制，一个未知进制，求那个未知的进制使两者相等。
+//进制转换没啥难的，主要是暴力遍历的话会超时，确定进制可能的上下界用二分查找好一些
+#include<iostream>
+#include<string>
+#include<algorithm>
+#include<cmath>
+#include<vector>
+using namespace std;
+int main(){
+	string n1,n2;
+	int tag,radix;
+	cin>>n1>>n2>>tag>>radix;
+	if(tag==2){
+		swap(n1,n2);
+	}
+	long long a=0,b=0,res;
+	int index=0;
+	int k=n1.length()-1;
+	while(k>=0){
+		char ch=n1[k];
+		if(ch>='a'&&ch<='z'){
+			a+=(ch-'a'+10)*pow(radix,index);
+		}
+		else{
+			a+=(ch-'0')*pow(radix,index);
+		}
+		k--;
+		index++;
+	}
+	long long temp=0;
+	for(int i=0;i<n2.length();i++){
+		int p;
+		if(n2[i]>='a'&&n2[i]<='z'){
+			p=n2[i]-'a'+10;
+		}
+		else{
+			p=n2[i]-'0';
+		}
+		if(p>temp){
+			temp=p;
+		}
+	}
+	long long l=temp+1;
+	long long r=a+1;
+	res=a+2;
+	while(l<=r){
+		temp=(l+r)/2;
+		index=0;
+		b=0;
+		string tempn2=n2;
+		k=tempn2.length()-1;
+		while(k>=0){
+			char ch=tempn2[k];
+			if(ch>='a'&&ch<='z'){
+				b+=(ch-'a'+10)*pow(temp,index);
+			}
+			else{
+				b+=(ch-'0')*pow(temp,index);
+			}
+			k--;
+			index++;
+			if(b>a||b<0){
+				break;
+			}
+		}
+		if(a==b){
+			res=min(res,temp);
+			r--;
+		}
+		else if(b>a||b<0){
+			r=temp-1;
+		}
+		else if(b<a){
+			l=temp+1;
+		}
+	}
+	if(res==a+2){
+		cout<<"Impossible";
+	} 
+	else{
+		cout<<res;
+	}
+	return 0;
+}
