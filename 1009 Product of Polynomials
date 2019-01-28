@@ -1,0 +1,52 @@
+//This time, you are supposed to find A×B where A and B are two polynomials.
+//3个数组，下标表示幂，值表示系数，没啥难的，注意输出。
+#include<iostream>
+using namespace std;
+int main(){
+	int k1,k2;
+	double num1[1001],num2[1001],num3[2001];
+	for(int i=0;i<1001;i++){
+		num1[i]=0;
+		num2[i]=0;
+	}
+	for(int i=0;i<2001;i++){
+		num3[i]=0;
+	}
+	cin>>k1;
+	for(int i=0;i<k1;i++){
+		int a;
+		double b;
+		cin>>a>>b;
+		num1[a]=b;
+	}
+	cin>>k2;
+	for(int i=0;i<k2;i++){
+		int a;
+		double b;
+		cin>>a>>b;
+		num2[a]=b;
+	}
+	for(int i=0;i<1001;i++){
+		if(num1[i]!=0){
+			for(int j=0;j<1001;j++){
+				if(num2[j]!=0){
+					num3[i+j]+=num1[i]*num2[j];
+				}
+			}
+		}
+	}
+	int cnt=0;
+	for(int i=0;i<2001;i++){
+		if(num3[i]!=0){
+			cnt++;
+		}
+	}
+	cout<<cnt;
+	for(int i=2000;i>=0;i--){
+		if(num3[i]!=0){
+			cout<<" "<<i<<" ";
+			printf("%.1f",num3[i]);
+		}
+	}
+	return 0;
+}
