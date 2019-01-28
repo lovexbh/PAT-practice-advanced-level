@@ -1,0 +1,161 @@
+//To evaluate the performance of our first year CS majored students, we consider their grades of three courses only:
+//C - C Programming Language, M - Mathematics (Calculus or Linear Algrbra), and E - English. At the mean time, we encourage
+//students by emphasizing on their best ranks -- that is, among the four ranks with respect to the three courses and the average
+//grade, we print the best rank for each student.
+//按学号输出四项排名中最好的一项，直接排四次序，学号的话排序加二分，做起来不难，但是写着有点烦。排名的话要注意前面有两个并列第二这样下一个就直接
+//算第四了，第一次提交错在这里。
+#include<iostream>
+#include<cstdlib>
+using namespace std;
+struct grades{
+	int cg;
+	int mg;
+	int eg;
+	int ag;
+	int id;
+	int rc;
+	int ra;
+	int re;
+	int rm;
+	int br;
+	char best;
+};
+int cmpa(const void*a,const void*b){
+	struct grades *p=(grades*)a;
+	struct grades *q=(grades*)b;
+	return q->ag-p->ag;
+}
+int cmpc(const void*a,const void*b){
+	struct grades *p=(grades*)a;
+	struct grades *q=(grades*)b;
+	return q->cg-p->cg;
+}
+int cmpe(const void*a,const void*b){
+	struct grades *p=(grades*)a;
+	struct grades *q=(grades*)b;
+	return q->eg-p->eg;
+}
+int cmpm(const void*a,const void*b){
+	struct grades *p=(grades*)a;
+	struct grades *q=(grades*)b;
+	return q->mg-p->mg;
+}
+int cmpid(const void*a,const void*b){
+	struct grades *p=(grades*)a;
+	struct grades *q=(grades*)b;
+	return p->id-q->id;
+}
+int main(){
+	int N,M;
+	cin>>N>>M;
+	struct grades inf[N];
+	int out[M];
+	for(int i=0;i<N;i++){
+		int a,b,c,d;
+		cin>>a>>b>>c>>d;
+		inf[i].id=a;
+		inf[i].cg=b;
+		inf[i].mg=c;
+		inf[i].eg=d;
+		inf[i].ag=(b+c+d)/3;
+	}
+	for(int i=0;i<M;i++){
+		int o;
+		cin>>o;
+		out[i]=o;
+	}
+	qsort(inf,N,sizeof(inf[0]),cmpc);
+	int index=1;
+	int rank=1;
+	inf[0].rc=1;
+	while(index<N){
+		if(inf[index].cg!=inf[index-1].cg){
+			rank=index+1;
+		}
+		inf[index].rc=rank;
+		index++;
+	}
+	qsort(inf,N,sizeof(inf[0]),cmpm);
+	index=1;
+	rank=1;
+	inf[0].rm=1;
+	while(index<N){
+		if(inf[index].mg!=inf[index-1].mg){
+			rank++;
+		}
+		inf[index].rm=rank;
+		index++;
+	}
+	qsort(inf,N,sizeof(inf[0]),cmpe);
+	index=1;
+	rank=1;
+	inf[0].re=1;
+	while(index<N){
+		if(inf[index].eg!=inf[index-1].eg){
+			rank++;
+		}
+		inf[index].re=rank;
+		index++;
+	}
+	qsort(inf,N,sizeof(inf[0]),cmpa);
+	index=1;
+	rank=1;
+	inf[0].ra=1;
+	while(index<N){
+		if(inf[index].ag!=inf[index-1].ag){
+			rank++;
+		}
+		inf[index].ra=rank;
+		index++;
+	}
+	for(int i=0;i<N;i++){
+		int minr=2001;
+		if(inf[i].ra<minr){
+			minr=inf[i].ra;
+			inf[i].best='A';
+		}
+		if(inf[i].rc<minr){
+			minr=inf[i].rc;
+			inf[i].best='C';
+		}
+		if(inf[i].rm<minr){
+			minr=inf[i].rm;
+			inf[i].best='M';
+		}
+		if(inf[i].re<minr){
+			minr=inf[i].re;
+			inf[i].best='E';
+		}
+		inf[i].br=minr;
+	}
+	qsort(inf,N,sizeof(inf[0]),cmpid);
+	for(int i=0;i<M;i++){
+		int l=0;
+		int flag=0;
+		int r=N-1;
+		int temp;
+		while(l<=r){
+			if(out[i]<inf[0].id||out[i]>inf[N-1].id){
+				break;
+			}
+			temp=(r+l)/2;
+			if(out[i]>inf[temp].id){
+				l=temp+1;
+			}
+			if(out[i]<inf[temp].id){
+				r=temp-1;
+			}
+			if(out[i]==inf[temp].id){
+				flag=1;
+				break;
+			}
+		}
+		if(flag==0){
+			cout<<"N/A"<<endl;
+		}
+		else{
+			cout<<inf[temp].br<<" "<<inf[temp].best<<endl;
+		}
+	}
+	return 0;
+}
