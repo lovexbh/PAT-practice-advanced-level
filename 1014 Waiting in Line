@@ -1,0 +1,79 @@
+//给出排队总人数和每人排队时间，窗口数量和窗口最大人数。后面的人默认排人数少的队，一样少就排数字小的。
+//要求输出指定的几个人是什么时候出去的
+//主要考察queue的使用方法，学习了一下
+#include<iostream>
+#include<queue>
+using namespace std;
+struct people{
+	int time;
+	int begin;
+	int end;
+	int id;
+};
+int main(){
+	int N,M,K,Q;
+	cin>>N>>M>>K>>Q;
+	int ques[1010];
+	queue<people>line[21],wait;
+	struct people peo[1010];
+	for(int i=1;i<=K;i++){
+		int t;
+		scanf("%d",&t);
+		peo[i].time=t;
+		peo[i].begin=-1;
+		peo[i].id=i;
+	}
+	for(int i=1;i<=Q;i++){
+		int q;
+		scanf("%d",&q);
+		ques[i]=q;
+	}
+	for(int i=1;i<=N;i++){
+		peo[i].begin=0;
+		peo[i].end=peo[i].time;
+	}
+	for(int i=1;i<=K;i++){
+		if(i<=M*N){
+			line[(i-1)%N+1].push(peo[i]);
+		}
+		else{
+			wait.push(peo[i]);
+		}
+	}
+	int nowtime=0;
+	int maxtime=540;
+	int cnt=K;
+	while(nowtime<maxtime&&cnt>0){
+		nowtime++;
+		for(int i=1;i<=N;i++){
+			if(line[i].empty()){
+				continue;
+			}
+			struct people head=line[i].front();
+			if(head.end==nowtime||head.end>maxtime){
+				line[i].pop();
+				cnt--;
+				line[i].front().begin=nowtime;
+				line[i].front().end=nowtime+line[i].front().time;
+				peo[head.id].begin=head.begin;
+				peo[head.id].end=head.end;
+				if(!wait.empty()){
+					line[i].push(wait.front());
+					wait.pop();
+				}
+			}
+		}
+	}
+	for(int i=1;i<=Q;i++){
+		int z,x;
+		z=peo[ques[i]].end/60+8;
+		x=peo[ques[i]].end%60;
+		if(peo[ques[i]].begin>=0&&peo[ques[i]].begin<=540){
+			printf("%02d:%02d\n",z,x);
+		}
+		else{
+			cout<<"Sorry"<<endl;
+		} 
+	}
+	return 0;
+}
