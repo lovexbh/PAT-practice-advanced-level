@@ -1,0 +1,70 @@
+//题目太长了，不打了，就是说给若干个城市，和城市间的道路，问如果其中某个城市沦陷了，需要修多少条路才能让剩下的城市全部联通。
+//写个DFS函数，遍历的同时更新信息，如果从函数中出来不是所有城市都经过的话就顺序选取下一个没经过的城市继续DFS，知道所有城市都经过。看一共要几次，路
+//线数量即为次数减1.
+#include<iostream>
+using namespace std;
+int N,M,K;
+int check[1001];
+int road[1001][1001];
+int isconnected[1001];
+void DFS(int cur){
+	isconnected[cur]=1;
+	for(int i=1;i<=N;i++){
+		if(isconnected[i]==0&&road[cur][i]==1){
+			DFS(i);
+		}
+	}
+	return;
+}
+int main(){
+	for(int i=0;i<1001;i++){
+		for(int j=0;j<1001;j++){
+			road[i][j]=0;
+		}
+	}
+	cin>>N>>M>>K;
+	for(int i=0;i<M;i++){
+		int a,b;
+		scanf("%d %d",&a,&b);
+		road[a][b]=1;
+		road[b][a]=1;
+	}
+	for(int i=0;i<K;i++){
+		int c;
+		scanf("%d",&c);
+		check[i]=c;
+	}
+	for(int i=0;i<K;i++){
+		int cnt=0;
+		for(int p=1;p<=N;p++){
+			isconnected[p]=0;
+		}
+		int n=check[i];
+		isconnected[n]=1;
+		for(int x=1;x<=N;x++){
+			if(road[x][n]==1){
+				road[x][n]=-1;
+				road[n][x]=-1;
+			}
+		}
+		int index=1;
+		while(index<=N){
+			if(isconnected[index]==1){
+				index++;
+				continue;
+			}
+			if(isconnected[index]==0){
+				DFS(index);
+				cnt++;
+			}
+		}
+		cout<<cnt-1<<endl;
+		for(int x=1;x<=N;x++){
+			if(road[x][n]==-1){
+				road[x][n]=1;
+				road[n][x]=1;
+			}
+		}
+	}
+	return 0;
+} 
