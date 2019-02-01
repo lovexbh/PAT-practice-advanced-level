@@ -1,0 +1,55 @@
+//A reversible prime in any number system is a prime whose "reverse" in that number system is also a prime. For example in the
+//decimal system 73 is a reversible prime because its reverse 37 is also a prime.
+//Now given any two positive integers N (<105)and D (1<D≤10), you are supposed to tell if N is a reversible prime with radix D.
+//这题题意没说清楚，有点坑，一个数和它的某一进制的数的倒转过来的数的十进制数都是质数就输出yes
+#include<iostream>
+#include<cmath>
+using namespace std;
+int isprime(int a){
+	if(a==2||a==3){
+		return 1;
+	}
+	if(a==1||a==0){
+		return 0;
+	}
+	for(int i=2;i<=(double)sqrt(a);i++){
+		if(a%i==0){
+			return 0;
+		}
+	}
+	return 1;
+}
+int main(){
+	int num,radix;
+	int a[100];
+	while(1){
+		int k=0;
+		int cnt=0;
+		int sum=0;
+		cin>>num>>radix;
+		if(num<0){
+			break;
+		}
+		if(isprime(num)==1){
+			k++;
+		}
+		while(num>0){
+			a[cnt]=num%radix;
+			num/=radix;
+			cnt++;
+		}
+		for(int i=cnt-1;i>=0;i--){
+			sum+=a[i]*pow(radix,cnt-1-i);
+		}
+		if(isprime(sum)==1){
+			k++;
+		}
+		if(k==2){
+			cout<<"Yes"<<endl;
+		}
+		if(k<2){
+			cout<<"No"<<endl;
+		}
+	}
+	return 0;
+}
