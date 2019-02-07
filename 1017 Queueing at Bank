@@ -1,0 +1,81 @@
+//Suppose a bank has K windows open for service. There is a yellow line in front of the windows which devides the waiting area
+//into two parts.All the customers have to wait in line behind the yellow line, until it is his/her turn to be served and there is
+//a window available. It is assumed that no window can be occupied by a single customer for more than 1 hour.
+//Now given the arriving time T and the processing time P of each customer, you are supposed to tell the average waiting time of all
+//the customers.
+//和之前那道题目类似，用队列模拟题目要求的情形，有一个要注意的点是只要在五点前到了，无论如何都是会被服务的。
+#include<iostream>
+#include<queue>
+#include<algorithm>
+#include<vector>
+using namespace std;
+struct inf{
+	int time;
+	int id;
+	int last;
+	int begin; 
+}; 
+bool cmp(inf a,inf b){
+	return a.begin<b.begin;
+}
+int main(){
+	int N,K;
+	scanf("%d %d",&N,&K);
+	vector<inf> peo;
+	queue <inf> win[K],wait;
+	for(int i=0;i<N;i++){
+		int hh,mm,ss,tt;
+		struct inf q;
+		scanf("%d:%d:%d %d",&hh,&mm,&ss,&tt);
+		q.time=tt*60;
+		q.begin=hh*3600+mm*60+ss;
+		if(q.begin<=17*3600){
+			peo.push_back(q);
+		}
+	}
+	sort(peo.begin(),peo.end(),cmp);
+	for(int i=0;i<peo.size();i++){
+		peo[i].id=i;
+		wait.push(peo[i]);
+	}
+	int nowtime=8*3600;
+	int maxtime=17*3600;
+	int cnt=peo.size();
+	while(cnt>0){
+		for(int i=0;i<K;i++){
+			if(!win[i].empty()){
+				struct inf node=win[i].front();
+				if(node.begin+node.time==nowtime){
+					win[i].pop();
+					cnt--;
+				}
+			}
+			if(win[i].empty()){
+				if(!wait.empty()){
+					if(wait.front().begin<=nowtime){
+						wait.front().begin=nowtime;
+						int p=wait.front().id;
+						win[i].push(wait.front());
+						wait.pop();
+						peo[p].last=nowtime-peo[p].begin;
+					}
+				}
+				
+			}
+		}
+		nowtime++;
+	}
+	double sum=0.0;
+	double ave;
+	if(peo.size()==0){
+		ave=0.0;
+	}
+	else{
+		for(int i=0;i<peo.size();i++){
+			sum+=peo[i].last;
+		}
+		ave=sum/(60.0*peo.size());
+	}
+	printf("%.1f",ave);
+	return 0;
+}
