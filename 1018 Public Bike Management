@@ -1,0 +1,107 @@
+//There is a public bike service in Hangzhou City which provides great convenience to the tourists from all over the world. 
+//One may rent a bike at any station and return it to any other stations in the city.The Public Bike Management Center (PBMC)
+//keeps monitoring the real-time capacity of all the stations. A station is said to be in perfect condition if it is exactly
+//half-full. If a station is full or empty, PBMC will collect or send bikes to adjust the condition of that station to perfect.
+//And more, all the stations on the way will be adjusted as well.When a problem station is reported, PBMC will always choose the
+//shortest path to reach that station. If there are more than one shortest path, the one that requires the least number of bikes
+//sent from PBMC will be chosen.
+//可以理解为到达目的地后不考虑回初始地的情况。在DFS遍历的同时更新要从初始地携带的车子的缺口和手头获得的自行车总和。
+#include<iostream>
+using namespace std;
+int cmax,N,sp,M;
+int road[501][501];
+int send=100000000;
+int get=100000000;
+int shortest=10000000;
+int bike[501];
+int isex[501];
+int route[101];
+int ROUTE[101];
+int K;
+void DFS(int cur,int length,int less,int num,int k){
+	int flag=0;
+	if(length>shortest){
+		return;
+	}
+	if(bike[cur]>=(cmax/2)){
+		num+=bike[cur]-cmax/2;
+	}
+	else{
+		if(num>=(cmax/2)-bike[cur]){
+			num-=(cmax/2)-bike[cur];
+		}
+		else{
+			less+=cmax/2-num-bike[cur];
+			num=0;
+		}
+	}
+	route[k]=cur;
+	if(cur==sp){
+		if(length<shortest){
+			shortest=length;
+			send=less;
+			get=num;
+			flag=1;
+		}
+		else if(length==shortest){
+			if(send>less){
+				send=less;
+				get=num;
+				flag=1;
+			}
+			else if(send==less){
+				if(num<get){
+					get=num;
+					flag=1;
+				}
+			} 
+		}
+		if(flag==1){
+			K=k;
+			for(int i=0;i<=K;i++){
+				ROUTE[i]=route[i];
+			}
+		}
+		return;
+	}
+	isex[cur]=1;
+	if(cur!=sp){
+		for(int i=0;i<=N;i++){
+			if(isex[i]==0&&road[i][cur]!=0){
+				DFS(i,length+road[i][cur],less,num,k+1);
+			}
+		}
+	}
+	isex[cur]=0;
+}
+int main(){
+	for(int i=0;i<501;i++){
+		for(int j=0;j<501;j++){
+			road[i][j]=0;
+			road[j][i]=0;
+		}
+	}
+	cin>>cmax>>N>>sp>>M;
+	for(int i=1;i<=N;i++){
+		int sum;
+		cin>>sum;
+		bike[i]=sum;
+	}
+	bike[0]=cmax/2;
+	for(int i=0;i<M;i++){
+		int a,b,c;
+		cin>>a>>b>>c;
+		road[a][b]=c;
+		road[b][a]=c;
+	}
+	for(int i=0;i<501;i++){
+		isex[i]=0;
+	}
+	DFS(0,0,0,0,0);
+	cout<<send<<" "<<"0";
+	for(int i=1;i<=K;i++){
+		cout<<"->"<<ROUTE[i];
+	}
+	cout<<" "<<get;
+	return 0;
+}
