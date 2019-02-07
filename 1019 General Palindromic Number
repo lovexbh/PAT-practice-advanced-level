@@ -1,0 +1,44 @@
+//题目不写了，给一个十进制数，把它转换为一个给定进制的数，判断这个数是不是回文数。
+#include<iostream>
+using namespace std;
+int main(){
+	int n,radix;
+	cin>>n>>radix;
+	int num[101];
+	int cnt=0;
+	while(n>0){
+		num[cnt]=n%radix;
+		n/=radix;
+		cnt++;
+	}
+	if(!cnt){
+		cout<<"Yes"<<endl;
+		cout<<"0";
+	}
+	else{
+		int flag=1;
+		int l=0;
+		int r=cnt-1;
+		while(l<=r){
+			if(num[l]!=num[r]){
+				flag=0;
+				break;
+			}
+			l++;
+			r--;
+		}
+		if(flag){
+			cout<<"Yes"<<endl;
+		}
+		else{
+			cout<<"No"<<endl;
+		}
+		for(int i=0;i<cnt;i++){
+			cout<<num[cnt-1-i];
+			if(i!=cnt-1){
+				cout<<" ";
+			}
+		}
+	}
+	return 0;
+}
