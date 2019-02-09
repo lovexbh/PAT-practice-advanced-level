@@ -1,0 +1,124 @@
+//A graph which is connected and acyclic can be considered a tree. The hight of the tree depends on the selected root.
+//Now you are supposed to find the root that results in a highest tree. Such a root is called the deepest root.
+//总的来说是给一个图让你判断以哪个点为根是一个最深的树，如果不是树则输出它有几部分
+//这里用到了一个结论，从图上任意一点x，DFS后找到的最深的点集合U中任一点，再DFS一次后得到集合v，u和v的并集就是我们需要的点集。
+//这里学到用vector存边，可以提高检索的效率
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int N;
+vector<int> road[10001];
+vector<int> v;
+int maxl=0;
+vector<int> longest; 
+vector<int> out;
+void DFS0(int cur){
+	v[cur]=1;
+	for(int i=0;i<road[cur].size();i++){
+		int nxt=road[cur][i];
+		if(v[nxt]){
+			continue;
+		}
+		DFS0(nxt);
+	}
+	return;
+}
+void DFS(int cur,int level){
+	v[cur]=1;
+	if(level>maxl){
+		maxl=level;
+		longest.clear();
+		longest.push_back(cur);
+	}
+	else if(level==maxl){
+		longest.push_back(cur);
+	}
+	for(int i=0;i<road[cur].size();i++){
+		int nxt=road[cur][i];
+		if(v[nxt]){
+			continue;
+		}
+		DFS(nxt,level+1);
+	}
+	return;
+	v[cur]=0;
+}
+void DFS1(int cur,int level){
+	v[cur]=1;
+	if(level>maxl){
+		maxl=level;
+		out.clear();
+		out.push_back(cur);
+	}
+	else if(level==maxl){
+		out.push_back(cur);
+	}
+	for(int i=0;i<road[cur].size();i++){
+		int nxt=road[cur][i];
+		if(v[nxt]){
+			continue;
+		}
+		DFS1(nxt,level+1);
+	}
+	v[cur]=0;
+	return;
+}
+bool cmp(int a,int b){
+	return a<b;
+}
+int main(){
+	cin>>N;
+	int error=0;
+	for(int i=0;i<N-1;i++){
+		int a,b;
+		scanf("%d %d",&a,&b);
+		road[a].push_back(b);
+		road[b].push_back(a);
+	}
+	int cnt=0;
+	int index=1;
+	for(int i=0;i<=N;i++){
+		v.push_back(0);
+	}
+	while(index<=N){
+		if(v[index]==0){
+			DFS0(index);
+			cnt++;
+		}
+		index++;
+	}
+	if(cnt>1){
+		error=1;
+	}
+	if(error){
+		cout<<"Error: "<<cnt<<" components";
+	}
+	else{
+		for(int i=0;i<=N;i++){
+			v[i]=0;
+		}
+		DFS(1,0);
+		for(int i=0;i<=N;i++){
+			v[i]=0;
+		}
+		DFS1(longest[0],0);
+		for(int i=0;i<longest.size();i++){
+			out.push_back(longest[i]);
+		}
+		sort(out.begin(),out.end(),cmp);
+		for(int i=0;i<out.size();i++){
+			if(i==0){
+				cout<<out[i]<<endl;
+			}
+			else{
+				if(out[i]==out[i-1]){
+					continue;
+				}
+				cout<<out[i]<<endl;
+			}
+		}
+	}
+	return 0;
+} 
+
