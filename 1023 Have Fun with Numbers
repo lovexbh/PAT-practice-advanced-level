@@ -1,0 +1,58 @@
+//Notice that the number 123456789 is a 9-digit number consisting exactly the numbers from 1 to 9, with no duplication.
+//Double it we will obtain 246913578, which happensto be another 9-digit number consisting exactly the numbers from 1 to 9, 
+//only in a different permutation.Check to see the result if we double it again!
+//Now you are suppose to check if there are more numbers with this property. That is, double a given number with k digits, 
+//you are to tell if the resulting number consists of only a permutation of the digits in the original number.
+//没啥难的，核心在于模拟大数的加法
+#include<iostream>
+#include<vector>
+using namespace std;
+int main(){
+	char c;
+	int flag=1;
+	int cnt=0;
+	int num1[10],num2[10];
+	int n[22];
+	vector<int> m;
+	for(int i=0;i<10;i++){
+		num1[i]=0;
+		num2[i]=0;
+	}
+	while(cin>>c){
+		if(c=='\n'){
+			break;
+		}
+		n[cnt]=c-'0';
+		num1[n[cnt]]++;
+		cnt++;
+	}
+	int temp=0;
+	for(int i=0;i<cnt;i++){
+		int k;
+		temp+=n[cnt-1-i]*2;
+		k=temp%10;
+		num2[k]++;
+		temp/=10;
+		m.push_back(k);
+		if(i==cnt-1&&temp>0){
+			num2[temp]++;
+			m.push_back(temp);
+		}
+	}
+	for(int i=0;i<10;i++){
+		if(num1[i]!=num2[i]){
+			flag=0;
+			break;
+		}
+	}
+	if(flag){
+		cout<<"Yes"<<endl;
+	}
+	else{
+		cout<<"No"<<endl;
+	}
+	for(int i=m.size()-1;i>=0;i--){
+		cout<<m[i];
+	}
+	return 0;
+}
