@@ -1,0 +1,67 @@
+//A Digital Library contains millions of books, stored according to their titles, authors, key words of their abstracts,
+//publishers, and published years. Each book is assigned an unique 7-digit number as its ID. Given any query from a reader,
+//you are supposed to output the resulting books, sorted in increasing order of their ID's.
+//用每个搜索内容的string在map里对应一串id，这一串id用set储存
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<map>
+#include<set>
+using namespace std;
+map<string,set<int>>ttitle,tauthor,tkey,tpub,tyear;
+void query(map<string,set<int>>&m,string &str){
+	if(m.find(str)!=m.end()){//map函数的.find（）函数会返回查找的内容的位置，如果没找到那么返回值与该map的最后位置相同。 
+		for(auto it=m[str].begin();it!=m[str].end();it++){
+			printf("%07d\n",*it);
+		}
+	}
+	else{
+		printf("Not Found\n");
+	}
+}
+int main(){
+	int n,m,id,num;
+	scanf("%d",&n);
+	string title,author,key,pub,year;
+	for(int i=0;i<n;i++){
+		scanf("%d\n",&id);
+		getline(cin,title);
+		ttitle[title].insert(id);
+		getline(cin,author);
+		tauthor[author].insert(id);
+		while(cin>>key){
+			tkey[key].insert(id);
+			char c=getchar();
+			if(c=='\n'){
+				break;
+			}
+		}
+		getline(cin,pub);
+		tpub[pub].insert(id);
+		getline(cin,year);
+		tyear[year].insert(id);
+	}
+	scanf("%d",&m);
+	for(int i=0;i<m;i++){
+		string temp;
+		scanf("%d: ",&num);
+		getline(cin,temp);
+		printf("%d: %s\n",num,temp.c_str());
+		if(num==1){
+			query(ttitle,temp);
+		}
+		else if(num==2){
+			query(tauthor,temp);
+		}
+		else if(num==3){
+			query(tkey,temp);
+		}
+		else if(num==4){
+			query(tpub,temp);
+		}
+		else if(num==5){
+			query(tyear,temp);
+		}
+	}
+	return 0; 
+}
