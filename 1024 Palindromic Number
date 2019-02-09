@@ -1,0 +1,59 @@
+//给一个初始数和限定的步数，要求在这些步数内，通过变换将该数转变为回文数
+//变换方式为该数和它的倒数的和，无论是否成功都要输出最后一步的结果
+//核心也是大数加法模拟
+#include<iostream>
+#include<cmath>
+#include<vector>
+using namespace std;
+void reverse(vector<int> &a){
+	vector<int> b;
+	vector<int> c=a;
+	a.clear();
+	int temp=0;
+	for(int i=c.size()-1;i>=0;i--){
+		b.push_back(c[i]);
+	}
+	for(int i=0;i<c.size();i++){
+		temp+=c[i]+b[i];
+		int k=temp%10;
+		a.push_back(k);
+		temp/=10;
+	}
+	if(temp>0){
+		a.push_back(temp);
+	}
+}
+bool ispa(vector<int> a){
+	int len=a.size();
+	if(len==1){
+		return true;
+	}
+	else{
+		for(int i=0;i<(len/2);i++){
+			if(a[i]!=a[len-1-i]){
+				return false;
+			}
+		}
+	}
+	return true;
+}
+int main(){
+	vector<int> n;
+	int k;
+	char c;
+	while((c=getchar())!=' '){
+		n.push_back(c-'0');
+	}
+	scanf("%d",&k);
+	int cnt=0;
+	while(ispa(n)!=1&&cnt<k){
+		reverse(n);
+		cnt++;
+	}
+	for(int i=n.size()-1;i>=0;i--){
+		cout<<n[i];
+	}
+	cout<<endl;
+	cout<<cnt;
+	return 0;
+}
