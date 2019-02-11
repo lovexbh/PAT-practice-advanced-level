@@ -1,0 +1,63 @@
+//Excel can sort records according to any column. Now you are supposed to imitate this function.
+//模拟不同列的排序，写几个不同的cmp就行了，注意字符串的cmp函数的写法
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<cstring>
+using namespace std;
+struct inf{
+	int id,grade;
+	char name[9];
+};
+bool cmp1(inf a,inf b){
+	return a.id<b.id;
+}
+bool cmp2(inf a,inf b){
+	if(strcmp(a.name,b.name)!=0){
+		if(strcmp(a.name,b.name)<0){
+			return true;
+		}
+		if(strcmp(a.name,b.name)>0){
+			return false;
+		}
+	}
+	else{
+		return a.id<b.id;
+	}
+}
+bool cmp3(inf a,inf b){
+	if(a.grade!=b.grade){
+		return a.grade<b.grade;
+	}
+	else{
+		return a.id<b.id;
+	}
+}
+int main(){
+	int n,c;
+	vector<inf> stu;
+	scanf("%d %d",&n,&c);
+	for(int i=0;i<n;i++){
+		int d,g;
+		char t[9];
+		struct inf temp;
+		scanf("%d %s %d",&d,&t,&g);
+		temp.grade=g;
+		temp.id=d;
+		strcpy(temp.name,t);
+		stu.push_back(temp);
+	}
+	if(c==1){
+		sort(stu.begin(),stu.end(),cmp1);
+	} 
+	if(c==2){
+		sort(stu.begin(),stu.end(),cmp2);
+	}
+	if(c==3){
+		sort(stu.begin(),stu.end(),cmp3);
+	}
+	for(int i=0;i<stu.size();i++){
+		printf("%06d %s %d\n",stu[i].id,stu[i].name,stu[i].grade);
+	}
+	return 0;
+}
