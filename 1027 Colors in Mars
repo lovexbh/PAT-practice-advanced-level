@@ -1,0 +1,29 @@
+//People in Mars represent the colors in their computers in a similar way as the Earth people.
+//That is, a color is represented by a 6-digit number, where the first 2 digits are for Red, the middle
+//2 digits for Green, and the last 2 digits for Blue. The only difference is that they use radix 13 (0-9 and A-C)
+//instead of 16. Now given a color in three decimal numbers (each between 0 and 168),you are supposed to output their Mars RGB values.
+//水题，会用map以后都不用写switch了
+#include<iostream>
+#include<map>
+using namespace std;
+int main(){
+	int n[3];
+	map<int,char> out;
+	for(int i=0;i<10;i++){
+		out[i]=((i+'0'));
+	}
+	out[10]=('A');
+	out[11]=('B');
+	out[12]=('C');
+	char m[6];
+	int a,b,c;
+	scanf("%d %d %d",&n[0],&n[1],&n[2]);
+	m[0]=out[n[0]/13];
+	m[1]=out[n[0]%13];
+	m[2]=out[n[1]/13];
+	m[3]=out[n[1]%13];
+	m[4]=out[n[2]/13];
+	m[5]=out[n[2]%13]; 
+	printf("#%c%c%c%c%c%c",m[0],m[1],m[2],m[3],m[4],m[5]);
+	return 0;
+}
