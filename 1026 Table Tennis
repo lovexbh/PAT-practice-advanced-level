@@ -1,0 +1,153 @@
+//A table tennis club has N tables available to the public. The tables are numbered from 1 to N. For any pair of players, 
+//if there are some tables open when they arrive, they will be assigned to the available table with the smallest number. If
+//all the tables are occupied, they will have to wait in a queue. It is assumed that every pair of players can play for at most 2 hours.
+//Your job is to count for everyone in queue their waiting time, and for each table the number of players it has served for the day.
+//One thing that makes this procedure a bit complicated is that the club reserves some tables for their VIP members. When a VIP table
+//is open, the first VIP pair in the queue will have the priviledge to take it. However, if there is no VIP in the queue, the next pair
+//of players can take it. On the other hand, if when it is the turn of a VIP pair, yet no VIP table is available, they can be assigned 
+//as any ordinary players.
+//这题真的太麻烦了，找了个大佬的模仿学习
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cmath>
+using namespace std;
+struct player{
+	int begin,time,serve;
+	bool vip;
+};
+struct table{
+	int end=8*3600,num;
+	bool vip;
+};
+bool cmp1(player a,player b){
+	return a.begin<b.begin;
+}
+bool cmp2(player a,player b){
+	return a.serve<b.serve;
+}
+vector<player> human;
+vector<table> ta;
+void allocatable(int pid,int tid){//这个函数是表示球台和球员匹配成功，更新球台和球员的信息。
+	if(human[pid].begin<=ta[tid].end){
+		human[pid].serve=ta[tid].end;
+	}
+	else{
+		human[pid].serve=human[pid].begin;
+	}
+	ta[tid].end=human[pid].serve+human[pid].time;
+	ta[tid].num++;
+}
+int findnextvip(int vipid){//表示一个vip球员已经被服务，寻找下一个vip球员
+	vipid++;
+	while(vipid<human.size()&&human[vipid].vip==false){
+		vipid++;
+	}
+	return vipid;
+}
+int main(){
+	int n,k,m,viptable;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		struct player temp;
+		int h,m,s,t,tag;
+		scanf("%d:%d:%d %d %d",&h,&m,&s,&t,&tag);
+		temp.begin=h*3600+m*60+s;
+		if(temp.begin>=21*3600){//九点和九点以后来的顾客直接不用输出的，所以不用压入vector
+			continue;
+		}
+		temp.time=t*60;
+		if(t*60>2*3600){
+			temp.time=2*3600;
+		}
+		temp.vip=tag;
+		temp.serve=21*3600;
+		human.push_back(temp);
+	}
+	scanf("%d %d",&k,&m);
+	ta.resize(k+1);
+	for(int i=0;i<m;i++){//标注vip球台信息
+		scanf("%d",&viptable);
+		ta[viptable].vip=true;
+	}
+	sort(human.begin(),human.end(),cmp1);在vector里排好队
+	int i=0,vipid=-1;//i代表球员，vipid代表vip球员的位置
+	vipid=findnextvip(vipid);//找到第一名vip球员
+	while(i<human.size()){//主函数，模拟排队的过程
+		int index=-1,minendtime=999999999;//index是球台的编号，minendtime是最早结束的球台的时间
+		for(int j=1;j<=k;j++){//遍历所有球台，找到最早结束的球台以及结束的时间
+			if(ta[j].end<minendtime){
+				minendtime=ta[j].end;
+				index=j;
+			}
+		}
+		if(ta[index].end>=21*3600){//如果结束时间在21点以后，直接退出循环
+			break;
+		}
+		if(human[i].vip==true&&i<vipid){//如果vip插过队了，就跳过，轮到下个人
+			i++;
+			continue;
+		}
+		if(ta[index].vip==true){//如果球台是vip球台
+			if(human[i].vip==true){如果是vip
+				allocatable(i,index);//匹配成功
+				if(vipid==i){
+					vipid=findnextvip(vipid);//找到下一个vipid准备插队。
+					i++;
+				}
+			}
+			else{
+				if(vipid<human.size()&&human[vipid].begin<=ta[index].end){//如果队伍里有vip且已经来了
+					allocatable(vipid,index);//插队
+					vipid=findnextvip(vipid);//找下一个vip
+				}
+				else{
+					allocatable(i,index);//没有vip插队，正常排队
+					i++;
+				}
+			}
+		}
+		else{//如果是正常球台
+			if(human[i].vip==false){//如果不是vip，直接匹配
+				allocatable(i,index);
+				i++;
+			}
+			else{//如果是vip
+				int vipindex=-1,minvipendtime=999999999;//找到最早结束的vip球台
+				for(int j=1;j<=k;j++){
+					if(ta[j].vip==true&&ta[j].end<minvipendtime){
+						minvipendtime==ta[j].end;
+						vipindex=j;
+					}
+				}
+				if(vipindex!=-1&&human[i].begin>=ta[vipindex].end){如果i是在vip球台结束以后到的
+					allocatable(i,vipindex);//匹配vip球台
+					if(vipid==i){
+						vipid=findnextvip(vipid);//找到下一个vip
+					}
+					i++; 
+				}
+				else{//如果不是，匹配普通球台
+					allocatable(i,index);
+					if(vipid==i){
+						vipid=findnextvip(vipid);
+					}
+					i++; 
+				}
+			}
+		}
+	}
+	sort(human.begin(),human.end(),cmp2);
+	for(int i=0;i<human.size()&&human[i].serve<21*3600;i++){
+		printf("%02d:%02d:%02d ",human[i].begin/3600,human[i].begin%3600/60,human[i].begin%60);
+		printf("%02d:%02d:%02d ",human[i].serve/3600,human[i].serve%3600/60,human[i].serve%60);
+		printf("%.0f\n",round((human[i].serve-human[i].begin)/60.0));
+	}
+	for(int i=1;i<=k;i++){
+		if(i!=1){
+			printf(" ");
+		}
+		printf("%d",ta[i].num);
+	}
+	return 0;
+}
