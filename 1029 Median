@@ -1,0 +1,43 @@
+//给两个有序数列，求这两个数列合成一个总数列的中位数。
+//两个数列各20w，开一个40w的数组会超内存。所以存一个数组另一个数组在线判断。因为已经排好序了，只要从小数到中间个数输出即可，注意细节。
+#include<iostream>
+using namespace std;
+int main (){
+	int num[200005];
+	int number;
+	int midpos;
+	int n,m;
+	scanf("%d",&n);
+	for(int i=1;i<=n;i++){
+		scanf("%d",&number);
+		num[i]=number;
+	}
+	scanf("%d",&m);
+	int k=1;
+	int count=0;
+	midpos=(m+n+1)/2;
+	for(int i=1;i<=m;i++){
+		scanf("%d",&number);
+		while(num[k]<number&&k<=n){
+			count++;
+			if(count==midpos){
+				cout<<num[k];
+			}
+			k++;
+		}
+		count++;
+		if(count==midpos){
+			cout<<number;
+		}
+	}
+	while(k<=n){
+		count++;
+		if(count==midpos){
+			cout<<num[k];
+		}
+		k++;
+	}
+	return 0;
+} 
+ 
+ 
