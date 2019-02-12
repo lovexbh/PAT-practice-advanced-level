@@ -1,0 +1,77 @@
+//A traveler's map gives the distances between cities along the highways, together with the cost of each highway.
+//Now you are supposed to write a program to help a traveler to decide the shortest path between his/her starting city
+//and the destination. If such a shortest path is not unique, you are supposed to output the one with the minimum cost,
+//which is guaranteed to be unique.
+//给出一堆城市的数据，要求找到最短路径，路径相同的情况下选择花费最少的。
+//做过很多这样的，DFS的同时更新最短路径和最少花费即可，不过这个要另开一个数组记录途径
+#include<iostream>
+#include<vector>
+using namespace std;
+int n,m,s,d;
+int road[505][505],cst[505][505];
+bool v[505];
+int num;
+int route[505],ROUTE[505];
+int shortest=999999;
+int leastc=999999;
+void DFS(int cur,int cost,int length,int order){
+	if(length>shortest){
+		return;
+	}
+	if(length==shortest&&cost>leastc){
+		return;
+	}
+	route[order]=cur;
+	if(cur==d){
+		if(length<shortest){
+			shortest=length;
+			leastc=cost;
+			num=order;
+			for(int q=0;q<=num;q++){
+				ROUTE[q]=route[q];
+			}
+		}
+		else if(length==shortest&&cost<leastc){
+			leastc=cost;
+			num=order;
+			for(int q=0;q<=order;q++){
+				ROUTE[q]=route[q];
+			}
+		}
+		return;
+	}
+	v[cur]=1;
+	for(int i=0;i<n;i++){
+		if(v[i]==0&&road[cur][i]>0){
+			DFS(i,cost+cst[cur][i],length+road[cur][i],order+1);
+		}
+	}
+	v[cur]=0;
+	return;
+}
+int main(){
+	cin>>n>>m>>s>>d;
+	for(int i=0;i<n;i++){
+		v[i]=0;
+		for(int j=0;j<n;j++){
+			road[i][j]=0;
+			road[j][i]=0;
+			cst[i][j]=0;
+			cst[j][i]=0;
+		}
+	}
+	for(int i=0;i<m;i++){
+		int a,b,e,f;
+		cin>>a>>b>>e>>f;
+		road[a][b]=e;
+		road[b][a]=e;
+		cst[a][b]=f;
+		cst[b][a]=f;
+	}
+	DFS(s,0,0,0);
+	for(int i=0;i<=num;i++){
+		cout<<ROUTE[i]<<" ";
+	}
+	cout<<shortest<<" "<<leastc;
+	return 0;
+} 
