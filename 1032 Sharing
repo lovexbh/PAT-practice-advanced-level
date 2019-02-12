@@ -1,0 +1,41 @@
+//以链表形式给出两个字符串，找出共同的尾部
+//开始是写结构体二分查找，还是超时，最后还是开了两个10*6级别的数组做哈希表。把两个字符串的顺序理出来再从尾部查找等。
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+char data[1000000];
+int Next[1000000];
+int main(){
+	int node1,node2,n;
+	int temp;
+	vector<int> list1,list2;
+	scanf("%d %d %d",&node1,&node2,&n);
+	for(int i=0;i<n;i++){
+		int addr,nxt;
+		char c;
+		scanf("%d %c %d",&addr,&c,&nxt);
+		data[addr]=c;
+		Next[addr]=nxt;
+	}
+	while(node1!=-1){
+		list1.push_back(node1);
+		node1=Next[node1]; 
+	}
+	while(node2!=-1){
+		list2.push_back(node2);
+		node2=Next[node2];
+	}
+	int index1=list1.size()-1,index2=list2.size()-1;
+	if(index1<0||index2<0||list1[index1]!=list2[index2]){
+		printf("-1");
+	}
+	else{
+		while(list1[index1]==list2[index2]&&index1>=0&&index2>=0){
+			index1--;
+			index2--;
+		}
+		printf("%05d",list1[index1+1]);
+	}
+	return 0;
+}
