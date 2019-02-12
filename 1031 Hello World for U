@@ -1,0 +1,35 @@
+//给一个字符串，要求按U型输出，水题；
+#include<iostream>
+#include<vector>
+using namespace std;
+int findcol(int n){
+	int ret=0;
+	int r;
+	do{
+		ret++;
+		r=n-2*ret;
+	}while(ret<=r&&r>=3);
+	return ret-1;
+}
+int main(){
+	char c;
+	char out[85];
+	int cnt=0;
+	while((c=getchar())!='\n'){
+		out[cnt]=c;
+		cnt++;
+	}
+	int col=findcol(cnt+2);
+	int row=(cnt+2)-(2*col);
+	for(int i=0;i<col-1;i++){
+		cout<<out[i];
+		for(int j=0;j<row-2;j++){
+			cout<<" ";
+		}
+		cout<<out[cnt-1-i]<<endl;
+	}
+	for(int i=col-1;i<col-1+row;i++){
+		cout<<out[i];
+	}
+	return 0;
+}
