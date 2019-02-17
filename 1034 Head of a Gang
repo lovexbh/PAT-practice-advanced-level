@@ -1,0 +1,98 @@
+//One way that the police finds the head of a gang is to check people's phone calls. 
+//If there is a phone call between A and B, we say that A and B is related. The weight of a relation is
+//defined to be the total time length of all the phone calls made between the two persons. A "Gang" is a cluster 
+//of more than 2 persons who are related to each other with total relation weight being greater than a given threthold K.
+//In each gang, the one with maximum total weight is the head. Now given a list of phone calls,
+//you are supposed to find the gangs and the heads.
+//换了皮的dfs问题，一开始思路没理清，后来想通了就好多了
+#include<iostream>
+#include<string>
+#include<cstring>
+#include<algorithm>
+#include<map>
+using namespace std;
+#define maxsize 2005
+struct gang{
+	string head;
+	int num;
+};
+bool cmp(gang a,gang b){
+	return a.head<b.head;
+}
+gang ga[maxsize];
+map<string,int> m1;
+map<int,string> m2;
+int n,k;
+int num=1;
+int a[maxsize][maxsize];
+int weight[maxsize];
+int visit[maxsize];
+int totalnum=0;
+int totalweight=0;
+int maxweight=0,maxid=0;
+int gangnum=0;
+void dfs(int cur){
+	visit[cur]=1;
+	totalweight+=weight[cur];
+	totalnum++;
+	if(weight[cur]>maxweight){
+		maxweight=weight[cur];
+		maxid=cur;
+	}
+	for(int i=1;i<num;i++){
+		if(a[cur][i]>0&&visit[i]==0){
+			dfs(i);
+		}
+	}
+}
+void dfstraversal(){
+	for(int i=1;i<num;i++){
+		totalweight=0;
+		totalnum=0;
+		maxweight=0;
+		maxid=0;
+		if(visit[i]==0){
+			dfs(i);
+		}
+		if(totalnum>2&&totalweight>2*k){
+			gangnum++;
+			ga[gangnum].head=m2[maxid];
+			ga[gangnum].num=totalnum;
+		}
+	}
+	cout<<gangnum<<endl;
+	sort(ga+1,ga+gangnum+1,cmp);
+	for(int i=1;i<=gangnum;i++){
+		cout<<ga[i].head<<" "<<ga[i].num<<endl;
+	}
+}
+int main(){
+	string s1,s2;
+	int z,x,c,time,l,r;
+	memset(a,0,sizeof(a));
+	memset(visit,0,sizeof(visit));
+	cin>>n>>k;
+	for(int i=1;i<=n;i++){
+		cin>>s1>>s2>>time;
+		l=m1[s1];
+		r=m1[s2];
+		if(l==0){
+			m1[s1]=num;
+			m2[num]=s1;
+			l=num;
+			num++;
+		}
+		if(r==0){
+			m1[s2]=num;
+			m2[num]=s2;
+			r=num;
+			num++;
+		}
+		a[l][r]+=time;
+		a[r][l]+=time;
+		weight[l]+=time;
+		weight[r]+=time;
+	}
+	dfstraversal();
+	return 0;
+}
