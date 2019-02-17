@@ -1,0 +1,39 @@
+//Given a string, you are supposed to output the length of the longest symmetric sub-string. For example, 
+//given Is PAT&TAP symmetric?, the longest symmetric sub-string is s PAT&TAP s, hence you must output 11.
+//求最大回文数的长度，manacher算法，写起来简单而且不容易超时
+#include<iostream>
+#include<vector>
+#include<string>
+#include<algorithm>
+#include<cmath>
+using namespace std;
+int main(){
+	char c;
+	string s;
+	getline(cin,s);
+	vector<char> str;
+	str.push_back('$');
+	str.push_back('#');
+	for(int i=0;i<s.size();i++){
+		str.push_back(s[i]);
+		str.push_back('#');
+	}
+	str.push_back('@');
+	vector<int> p(str.size(),0);
+	int mx=0,id=0,maxlen=0;
+	for(int i=1;i<str.size();i++){
+		p[i]=mx>i?min(p[2*id-i],mx-i):1;
+		while(str[i+p[i]]==str[i-p[i]]){
+			p[i]++;
+		}
+		if(mx<i+p[i]){
+			mx=i+p[i];
+			id=i;
+		}
+		if(maxlen<p[i]){
+			maxlen=p[i];
+		}
+	}
+	cout<<maxlen-1;
+	return 0;
+}
