@@ -1,0 +1,68 @@
+//This time you are asked to tell the difference between the lowest
+//grade of all the male students and the highest grade of all the female students.
+//排序题，没啥可说的
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<string>
+#include<cstring>
+using namespace std;
+struct students{
+	int grade;
+	char name[11],id[11];
+	char gender;
+};
+bool cmp1(students a,students b){
+	return a.grade<b.grade;
+}
+bool cmp2(students a,students b){
+	return a.grade>b.grade;
+} 
+int main(){
+	int n,grade1,grade2;
+	int flag=1;
+	scanf("%d",&n);
+	vector<students> m,f;
+	for(int i=0;i<n;i++){
+		struct students temp;
+		char g;
+		char n[11],ID[11];
+		int score;
+		scanf("%s %c %s %d",&n,&g,&ID,&score);
+		strcpy(temp.name,n);
+		strcpy(temp.id,ID);
+		temp.gender=g;
+		temp.grade=score;
+		if(g=='M'){
+			m.push_back(temp);
+		}
+		else{
+			f.push_back(temp);
+		}
+	}
+	if(f.size()==0){
+		printf("Absent\n");
+		flag=0;
+	}
+	else{
+		sort(f.begin(),f.end(),cmp2);
+		printf("%s %s\n",f[0].name,f[0].id);
+		grade1=f[0].grade;
+	}
+	if(m.size()==0){
+		printf("Absent\n");
+		flag=0;
+	}
+	else{
+		sort(m.begin(),m.end(),cmp1);
+		printf("%s %s\n",m[0].name,m[0].id);
+		grade2=m[0].grade;
+	}
+	if(flag==0){
+		printf("NA");
+	}
+	else{
+		printf("%d",grade1-grade2);
+	}
+	return 0;
+}
