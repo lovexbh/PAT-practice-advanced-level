@@ -1,0 +1,54 @@
+//按题目的要求，把优惠券数字和产品数字分别按正负分入四个数组，逐个排序，绝对值大的相乘最后求和即可
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+bool cmp1(int a,int b){
+	return a>b;
+}
+bool cmp2(int a,int b){
+	return a<b;
+}
+int main(){
+	int nc,np;
+	int num;
+	int sum;
+	vector<int> pos1,pos2,neg1,neg2;
+	scanf("%d",&nc);
+	for(int i=0;i<nc;i++){
+		scanf("%d",&num);
+		if(num>0){
+			pos1.push_back(num);
+		}
+		if(num<0){
+			neg1.push_back(num);
+		}
+	}
+	scanf("%d",&np);
+	for(int i=0;i<np;i++){
+		scanf("%d",&num);
+		if(num>0){
+			pos2.push_back(num);
+		}
+		if(num<0){
+			neg2.push_back(num);
+		}
+	}
+	sort(pos1.begin(),pos1.end(),cmp1);
+	sort(pos2.begin(),pos2.end(),cmp1);
+	sort(neg1.begin(),neg1.end(),cmp2);
+	sort(neg2.begin(),neg2.end(),cmp2);
+	int p1=0,p2=0,n1=0,n2=0;
+	while(p1<pos1.size()&&p2<pos2.size()){
+		sum+=pos1[p1]*pos2[p2];
+		p1++;
+		p2++;
+	}
+	while(n1<neg1.size()&&n2<neg2.size()){
+		sum+=neg1[n1]*neg2[n2];
+		n1++;
+		n2++;
+	}
+	printf("%d",sum);
+	return 0;
+}
