@@ -1,0 +1,53 @@
+//Zhejiang University has 40000 students and provides 2500 courses. Now given the student name lists of all the courses, 
+//you are supposed to output the registered course list for each student who comes for a query.
+//一开始用map+set做，最后一个点数据太大超时了，就改善下用哈希表
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<map>
+using namespace std;
+vector<int> inf[500001];
+int hashi(string str){
+	int ret=0;
+	ret+=(str[3]-'0');
+	ret+=(str[2]-'A')*10;
+	ret+=(str[1]-'A')*10*26;
+	ret+=(str[0]-'A')*10*26*26;
+	return ret;
+}
+bool cmp(int a,int b){
+	return a<b;
+}
+int main(){
+	int cnt=0;
+	int n,m;
+	cin>>n>>m;
+	for(int i=0;i<m;i++){
+		int id,num;
+		cin>>id>>num;
+		for(int j=0;j<num;j++){
+			string s;
+			cin>>s;
+			int k=hashi(s);
+			inf[k].push_back(id);
+		}
+	}
+	for(int i=0;i<n;i++){
+		string s;
+		cin>>s;
+		int k=hashi(s);
+		sort(inf[k].begin(),inf[k].end(),cmp);
+		cout<<s;
+		if(inf[k].size()==0){
+			cout<<" 0";
+		}
+		else{
+			cout<<" "<<inf[k].size();
+			for(int q=0;q<inf[k].size();q++){
+				cout<<" "<<inf[k][q];
+			} 
+		}
+		cout<<endl;
+	} 
+	return 0;
+}
