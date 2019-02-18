@@ -1,0 +1,58 @@
+//题目给出完全搜索树的定义和一个树的先序，让判断是不是完全搜索树，或者其镜像，并输出其后序。和之前一个题目类似，这种对树的操作还需要练习。
+#include<iostream>
+#include<vector>
+using namespace std;
+bool ismirror;
+vector<int> pre,post;
+void getpost(int root,int tail){
+	if(root>tail){
+		return;
+	}
+	int i=root+1,j=tail;
+	if(!ismirror){
+		while(i<=tail&&pre[root]>pre[i]){
+			i++;
+		}
+		while(j>root&&pre[root]<=pre[j]){
+			j--;
+		}
+	}
+	else{
+		while(i<=tail&&pre[root]<=pre[i]){
+			i++;
+		}
+		while(j>root&&pre[root]>pre[j]){
+			j--;
+		}
+	}
+	if(i-j!=1){
+		return;
+	}
+	getpost(root+1,j);
+	getpost(i,tail);
+	post.push_back(pre[root]);
+}
+int main(){
+	int n;
+	scanf("%d",&n);
+	pre.resize(n);
+	for(int i=0;i<n;i++){
+		scanf("%d",&pre[i]);
+	}
+	getpost(0,n-1);
+	if(post.size()!=n){
+		ismirror=true;
+		post.clear();
+		getpost(0,n-1);
+	}
+	if(post.size()==n){
+		printf("YES\n%d",post[0]);
+		for(int i=1;i<n;i++){
+			printf(" %d",post[i]);
+		}
+	}
+	else{
+		printf("NO");
+	}
+	return 0;
+}
