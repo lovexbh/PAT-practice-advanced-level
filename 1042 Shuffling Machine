@@ -1,0 +1,56 @@
+//模拟洗牌的机器，没什么好说的写个结构体记录牌的id即可
+#include<iostream>
+#include<algorithm>
+#include<map>
+#include<vector>
+using namespace std;
+struct poker{
+	int id,order;
+};
+bool cmp(poker a,poker b){
+	return a.order<b.order;
+}
+int main(){
+	int n;
+	cin>>n;
+	map<int,char> c;
+	c[0]='S';
+	c[1]='H';
+	c[2]='C';
+	c[3]='D';
+	vector <poker> p;
+	p.resize(54);
+	int num[55];
+	int order[55],temp[55];
+	for(int i=1;i<55;i++){
+		cin>>num[i];
+		p[i-1].id=i;
+		p[i-1].order=i;
+	}
+	for(int i=0;i<n;i++){
+		for(int j=1;j<55;j++){
+			p[j-1].order=num[j];
+		}
+		sort(p.begin(),p.end(),cmp);
+	}
+	for(int i=0;i<54;i++){
+		if(i>0){
+			cout<<" ";
+		}
+		if(p[i].id==53){
+			cout<<"J1";
+		}
+		if(p[i].id==54){
+			cout<<"J2";
+		}
+		if(p[i].id<53){
+			int k=p[i].id%13;
+			if(k==0){
+				k=13;
+			}
+			int l=(p[i].id-1)/13;
+			cout<<c[l]<<k;
+		}
+	}
+	return 0; 
+}
