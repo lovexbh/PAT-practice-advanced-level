@@ -1,0 +1,57 @@
+//Zhejiang University has 40,000 students and provides 2,500 courses. Now given the registered course list of each student,
+//you are supposed to output the student name lists of all the courses.
+//之前有一个类似的题目，做法差不多，注意超时问题，所以输入输出用scanf和printf
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+using namespace std;
+vector<int> course[2501];
+bool cmp(int a,int b){
+	return a<b;
+}
+int hashi(string s){
+	int ret=0;
+	ret+=(s[3]-'0');
+	ret+=(s[2]-'A')*10;
+	ret+=(s[1]-'A')*10*26;
+	ret+=(s[0]-'A')*10*26*26;
+	return ret;
+}
+void rehash(int name){
+	char c;
+	c=name/(10*26*26)+'A';
+	printf("%c",c);
+	name%=(10*26*26);
+	c=name/(10*26)+'A';
+	printf("%c",c);
+	name%=(10*26);
+	c=name/10+'A';
+	printf("%c",c);
+	name%=10;
+	c=name+'0';
+	printf("%c\n",c);
+}
+int main(){
+	int n,m;
+	scanf("%d %d",&n,&m);
+	for(int i=0;i<n;i++){
+		char name[5];
+		int total;
+		scanf("%s %d",&name,&total);
+		int index=hashi(name);
+		for(int j=0;j<total;j++){
+			int id;
+			scanf("%d",&id);
+			course[id].push_back(index);
+		}
+	}
+	for(int i=1;i<=m;i++){
+		printf("%d %d\n",i,course[i].size());
+		sort(course[i].begin(),course[i].end(),cmp);
+		for(int j=0;j<course[i].size();j++){
+			rehash(course[i][j]);
+		}
+	}
+	return 0;
+}
