@@ -1,0 +1,53 @@
+//A linked list consists of a series of structures, which are not necessarily adjacent in memory. 
+//We assume that each structure contains an integer key and a Next pointer to the next structure.
+//Now given a linked list, you are supposed to sort the structures according to their key values in increasing order.
+//链表题，本身没啥难度，注意不属于链表的直接排除不用考虑，还有一开始起点等于-1的情况
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+struct list{
+	int addr;
+	int key;
+	int next;
+};
+bool cmp(list a,list b){
+	return a.key<b.key;
+}
+struct list test[100001];
+int main(){
+	int n,begin;
+	vector<list> ans;
+	scanf("%d %d",&n,&begin);
+	for(int i=0;i<n;i++){
+		int a,k,nxt;
+		struct list temp;
+		scanf("%d %d %d",&a,&k,&nxt);
+		temp.addr=a;
+		temp.key=k;
+		temp.next=nxt;
+		test[a]=temp;
+	}
+	if(begin==-1){
+		printf("0 -1");
+		return 0;
+	}
+	int index=begin;
+	while(index!=-1){
+		ans.push_back(test[index]);
+		index=test[index].next;
+	}
+	sort(ans.begin(),ans.end(),cmp);
+	printf("%d %05d\n",ans.size(),ans[0].addr);
+	for(int i=0;i<ans.size();i++){
+		if(i==ans.size()-1){
+			ans[i].next=-1;
+			printf("%05d %d %d\n",ans[i].addr,ans[i].key,ans[i].next);
+		}
+		else{
+			ans[i].next=ans[i+1].addr;
+			printf("%05d %d %05d\n",ans[i].addr,ans[i].key,ans[i].next);
+		}
+	}
+	return 0;
+}
