@@ -1,0 +1,43 @@
+//一开始写了个递归函数，超时了，后来学习了大佬的代码，感觉做法更巧妙
+#include<cstdio>
+#include<algorithm>
+using namespace std;
+const int maxn = 210;
+const int maxL = 10010;
+int N, M, L;
+int color[maxn];
+bool hashtable[maxn] = { false };
+int stripe[maxL];
+int priority[maxL];
+int d[maxL];//状态
+int main()
+{
+	scanf("%d", &N);
+	scanf("%d", &M);
+	for (int i = 0; i < M; i++)
+	{
+		scanf("%d", &color[i]);
+		hashtable[color[i]] = true;//只比较这些数
+		priority[color[i]] = i;//设置优先级
+	}
+	scanf("%d", &L);
+	for (int i = 0; i < L; i++)
+	{
+		scanf("%d", &stripe[i]);
+	}
+	int ans = -1;
+	for (int i = 0; i < L; i++)
+	{
+		if (hashtable[stripe[i]] == true)
+		{
+			d[i] = 1;//LIS初始化为1
+			for (int j = 0; j < i; j++)
+			{
+				if (priority[stripe[i]] >= priority[stripe[j]] && d[j] + 1 > d[i])
+					d[i] = d[j] + 1;
+			}
+			ans = max(d[i], ans);
+		}
+	}
+	printf("%d\n", ans);
+}
