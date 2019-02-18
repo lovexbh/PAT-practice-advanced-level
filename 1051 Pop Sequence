@@ -1,0 +1,57 @@
+//Given a stack which can keep M numbers at most. Push N numbers in the order of 1, 2, 3, ..., N and pop randomly.
+//You are supposed to tell if a given sequence of numbers is a possible pop sequence of the stack. For example, if M is 5 and N is 7,
+//we can obtain 1, 2, 3, 4, 5, 6, 7 from the stack, but not 3, 2, 1, 7, 5, 6, 4.
+//用vector模拟堆栈的功能即可，不要搞错情况
+#include<iostream>
+#include<vector>
+using namespace std;
+int main(){
+	int c,n,m;
+	cin>>c>>n>>m;
+	vector<int> test;
+	for(int i=0;i<m;i++){
+		int error=0;
+		int index=1;
+		int tail=0;
+		test.clear();
+		for(int j=0;j<n;j++){
+			int num;
+			cin>>num;
+			if(error){
+				continue;
+			}
+			if(num<tail){
+				error=1;
+			}
+			if(num==tail){
+				test.pop_back();
+				tail=test.back();
+			}
+			if(num==index){
+				index++;
+			}
+			else if(num>index){
+				while(test.size()<c){
+					test.push_back(index);
+					if(index==num){
+						test.pop_back();
+						index++;
+						break;
+					} 
+					tail=index;
+					index++;
+				}
+				if(test.size()==c){
+					error=1;
+				}
+			}
+		}
+		if(error){
+			cout<<"NO"<<endl;
+		}
+		else{
+			cout<<"YES"<<endl;
+		}
+	}
+	return 0;
+}
