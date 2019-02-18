@@ -1,0 +1,33 @@
+//把字符串2中出现的字符在字符串1中都去掉，因为ascii码本来就只有一百多位，这题用哈希表就很方便
+#include<iostream>
+#include<string>
+#include<cstring>
+#include<vector>
+using namespace std;
+int main(){
+	string s1,s2;
+	vector<int> out;
+	getline(cin,s1);
+	getline(cin,s2);
+	int hashtable[200];
+	for(int i=0;i<200;i++){
+		hashtable[i]=1;
+	}
+	int len1=strlen(s1.c_str());
+	int len2=strlen(s2.c_str());
+	for(int i=0;i<len2;i++){
+		int num=s2[i]-'\0';
+		hashtable[num]=0;
+	}
+	for(int i=0;i<len1;i++){
+		int num=s1[i]-'\0';
+		if(hashtable[num]!=0){
+			out.push_back(num);
+		}
+	}
+	for(int i=0;i<out.size();i++){
+		char c=out[i]+'\0';
+		cout<<c;
+	}
+	return 0;
+}
