@@ -1,0 +1,64 @@
+//给一串数和一个值m要求输出和为m的区间，如果没有，就输出和为最接近m（大于）的值的区间
+//这题可以搞两个指针来遍历，但是队列可以做到同样的效果而且更简单
+#include<iostream>
+#include<queue>
+#include<vector> 
+using namespace std;
+int minx=999999999;
+int main(){
+	vector<int> f,b;
+	int n,m;
+	int sum=0;
+	int flag=0;
+	queue<int> total,temp,temp1,save;
+	cin>>n>>m;
+	for(int i=0;i<n;i++){
+		int num;
+		cin>>num;
+		total.push(num);
+		save.push(num);
+	}
+	while(!total.empty()){
+		temp.push(total.front());
+		sum+=total.front();
+		total.pop();
+		while(sum>m){
+			sum-=temp.front();
+			temp.pop();
+		}
+		if(sum==m){
+			int r=n-total.size();
+			int l=n-total.size()-temp.size()+1;
+			printf("%d-%d\n",l,r);
+			flag=1;
+		}
+		
+	}
+	if(flag==0){
+		sum=0;
+		while(!save.empty()){
+			temp1.push(save.front());
+			sum+=save.front();
+			save.pop();
+			while(sum>m){
+				if(sum==minx){
+					f.push_back((n-save.size()-temp1.size()+1));
+					b.push_back(n-save.size());
+				}
+				if(sum<minx){
+					minx=sum;
+					f.clear();
+					b.clear();
+					f.push_back((n-save.size()-temp1.size()+1));
+					b.push_back(n-save.size());
+				}
+				sum-=temp1.front();
+				temp1.pop();
+			}
+		}
+		for(int i=0;i<f.size();i++){
+			printf("%d-%d\n",f[i],b[i]);
+		}
+	}
+	return 0;
+}
