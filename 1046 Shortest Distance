@@ -1,0 +1,35 @@
+//20分题，没什么好说的，注意最后求距离时不能遍历，会超时
+#include<iostream>
+#include<vector>
+#include<cmath>
+using namespace std;
+int main(){
+	int n,m,distance=0;
+	vector<int> dis;
+	dis.push_back(0);
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		int num;
+		scanf("%d",&num);
+		distance+=num;
+		dis.push_back(distance);
+	}
+	cin>>m;
+	for(int i=0;i<m;i++){
+		int sum1=0;
+		int sum2=0;
+		int sum;
+		int a,b,temp;
+		scanf("%d %d",&a,&b);
+		if(a>b){
+			temp=a;
+			a=b;
+			b=temp;
+		}
+		sum1=dis[b-1]-dis[a-1];
+		sum2=distance-sum1;
+		sum=min(sum1,sum2);
+		cout<<sum<<endl;
+	}
+	return 0;
+}
