@@ -1,0 +1,64 @@
+//开始理解题目用了半天，模拟队列
+#include<iostream>
+#include<string.h>
+#include<vector>
+#include<algorithm>
+#include<iomanip>
+#include<time.h>
+#include<math.h>
+#include<set>
+#include<list>
+#include<climits>
+#include<queue>
+#include<cstring>
+#include<map>
+#include<stack>
+#include<string>
+using namespace std;
+struct mic {
+	int value;
+	int rank;
+};
+mic t[1005];
+int np[1005];
+int ng[1005];
+map<int, int> a;
+int main()
+{
+	int np, ng;queue<int> cur;
+	cin >> np >> ng;
+	for (int i = 0; i < np; i++) {
+		cin >> t[i].value;
+	}
+	for (int i = 0; i < np; i++) {
+		int d;
+		cin >> d;
+		cur.push(d);
+	}
+	int tnp = np;
+	
+	while (cur.size() != 1) {
+	int sumM = tnp%ng != 0 ? tnp / ng + 1 : tnp / ng;
+	for (int i = 0; i < sumM; i++) {
+		int k = cur.front();
+		for (int j = 0; j < ng; j++) {
+			if (i*ng + j >= tnp)break;
+			int front = cur.front();
+			if (t[front].value > t[k].value) {
+				k = front;
+			}
+			t[front].rank = sumM + 1;
+			cur.pop();
+		}
+		cur.push(k);
+	}
+	tnp = sumM;
+	}
+	t[cur.front()].rank = 1;
+	for (int i = 0; i < np; i++) {
+		if (i != np - 1)cout << t[i].rank << " ";
+		else
+			cout << t[i].rank << endl;
+	}
+	return 0;
+}
