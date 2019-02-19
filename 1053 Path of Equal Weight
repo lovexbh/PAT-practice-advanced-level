@@ -1,0 +1,66 @@
+//找到从根到叶节点的权重和等于给定值的路径并输出。dfs题目，注意输出要排序所以提前排序
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+bool isleaf[101];
+bool visit[101];
+int weight[101];
+vector<int> road[101],route,ROUTE[100001];
+int n,m,s;
+int cnt=0;
+bool cmp(int a,int b){
+	return weight[a]>weight[b];
+}
+void dfs(int cur,int we){
+	route.push_back(cur);
+	if(isleaf[cur]){
+		if(we==s){
+			for(int p=0;p<route.size();p++){
+				ROUTE[cnt].push_back(route[p]);
+			}
+			cnt++;
+		}
+	}
+	visit[cur]=true;
+	for(int i=0;i<road[cur].size();i++){
+		int nxt=road[cur][i];
+		if(!visit[nxt]){
+			dfs(nxt,we+weight[nxt]);
+		}
+	}
+	route.pop_back();
+	visit[cur]=false;
+	return;
+}
+int main(){
+	scanf("%d %d %d",&n,&m,&s);
+	for(int i=0;i<n;i++){
+		isleaf[i]=true;
+		visit[i]=false;
+		scanf("%d",&weight[i]);
+	}
+	for(int i=0;i<m;i++){
+		int r,k,id;
+		scanf("%d %d",&r,&k);
+		isleaf[r]=false;
+		for(int j=0;j<k;j++){
+			scanf("%d",&id);
+			road[r].push_back(id);
+		}
+		sort(road[r].begin(),road[r].end(),cmp);
+	}
+	dfs(0,weight[0]);
+	for(int i=0;i<cnt;i++){
+		for(int j=0;j<ROUTE[i].size();j++){
+			int num=weight[ROUTE[i][j]];
+			if(j<ROUTE[i].size()-1){
+				printf("%d ",num);
+			}
+			if(j==ROUTE[i].size()-1){
+				printf("%d\n",num);
+			}
+		}
+	}
+	return 0;
+}
