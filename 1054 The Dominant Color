@@ -1,0 +1,27 @@
+//Behind the scenes in the computer's memory, color is always talked about as a series of 24 bits of information for each pixel. 
+//In an image, the color with the largest proportional area is called the dominant color. A strictly dominant color takes more than 
+//half of the total area. Now given an image of resolution M by N (for example, 800×600),you are supposed to point out the strictly 
+//dominant color.
+//水题，输入的时候计数，超过一半记下来准备输出即可
+#include<iostream>
+#include<cstring>
+using namespace std;
+int hashtable[20000000];
+int main(){
+	int m,n;
+	int ans;
+	memset(hashtable,0,20000000);
+	scanf("%d %d",&m,&n);
+	for(int i=0;i<n;i++){
+		for(int j=0;j<m;j++){
+			int k;
+			scanf("%d",&k);
+			hashtable[k]++;
+			if(hashtable[k]>=((m*n/2)+1)){
+				ans=k;
+			}
+		}
+	}
+	printf("%d",ans);
+	return 0;
+}
