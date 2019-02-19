@@ -1,0 +1,65 @@
+//Forbes magazine publishes every year its list of billionaires based on the annual ranking of the world's
+//wealthiest people. Now you are supposed to simulate this job, but concentrate only on the people in a certain 
+//range of ages. That is, given the net worths of N people,
+//you must find the M richest people in a given range of their ages.
+//先排序再遍历即可，一开始想复杂了，排序两次直接超时
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<string>
+#include<cmath>
+#include<cstring>
+using namespace std;
+struct people{
+	char name[9];
+	int age,wealth;
+};
+vector<people> total;
+bool cmp2(people a,people b){
+	if(a.wealth!=b.wealth){
+		return a.wealth>b.wealth;
+	}
+	else if(a.age!=b.age){
+		return a.age<b.age;
+	}
+	else{
+		if(strcmp(a.name,b.name)<0){
+			return true;
+		}
+		if(strcmp(a.name,b.name)>0){
+			return false;
+		}
+	}
+}
+void query(int a,int b,int n){
+	int sum=0;
+	for(int i=0;i<total.size();i++){
+		if(total[i].age>=a&&total[i].age<=b){
+			printf("%s %d %d\n",total[i].name,total[i].age,total[i].wealth);
+			sum++;
+		}
+		if(sum==n){
+			break;
+		}
+	}
+	if(sum==0){
+		printf("None\n");
+	}
+}
+int main(){
+	int n,m;
+	scanf("%d %d",&n,&m);
+	for(int i=0;i<n;i++){
+		struct people t;
+		scanf("%s %d %d",&t.name,&t.age,&t.wealth);
+		total.push_back(t);
+	}
+	sort(total.begin(),total.end(),cmp2);
+	for(int i=1;i<=m;i++){
+		int z,x,c;
+		scanf("%d %d %d",&z,&x,&c);
+		printf("Case #%d:\n",i);
+		query(x,c,z);
+	}
+	return 0;
+}
