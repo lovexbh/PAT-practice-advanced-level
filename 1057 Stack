@@ -1,0 +1,72 @@
+//模拟堆栈的压入压出功能，并且要求完成一个频率非常高的取中位数功能，开始用的是排序，结果超时，后来看了网上的许多解法
+//核心思想是开个类似于哈希表的数组记录每个数字出现的次数，然后二分搜索找到中位数，那么这个表的存储和维护时间复杂度就很高，
+//遵从大佬们的建议学习了一下树状数组，这样维护就是logn级别的，不会超时
+#include<iostream>
+#include<stack>
+using namespace std;
+const int maxn=100010;
+int c[maxn];
+stack<int> s;
+int lowbit(int x){
+	return ((x)&(-x));
+}
+void update(int x,int v){
+	for(int i=x;i<maxn;i+=lowbit(i)){
+		c[i]+=v;
+	}
+}
+int getsum(int x){
+	int sum=0;
+	for(int i=x;i>=1;i-=lowbit(i)){
+		sum+=c[i];
+	}
+	return sum;
+}
+void peekmedian(){
+	int l=1,r=maxn,k=(s.size()+1)/2,mid;
+	while(l<r){
+		mid=(l+r)/2;
+		if(getsum(mid)>=k){
+			r=mid;
+		}
+		else{
+			l=mid+1;
+		}
+	}
+	printf("%d\n",l);
+	return;
+}
+int main(){
+	int n;
+	int num;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		char command[15];
+		scanf("%s",&command);
+		if(command[1]=='u'){
+			scanf("%d",&num);
+			s.push(num);
+			update(num,1);
+		}
+		if(command[1]=='o'){
+			if(s.empty()){
+				printf("Invalid\n");
+			}
+			else{
+				num=s.top();
+				update(num,-1);
+				printf("%d\n",num);
+				s.pop();
+			}
+		}
+		if(command[1]=='e'){
+			if(s.empty()){
+				printf("Invalid\n");
+			}
+			else{
+				peekmedian();
+			}
+		}
+	}
+	return 0;
+}
