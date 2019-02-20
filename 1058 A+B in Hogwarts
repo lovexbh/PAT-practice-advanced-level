@@ -1,0 +1,15 @@
+//进制转换，还限制数位，水中水
+#include<iostream>
+using namespace std;
+int main(){
+	int a1,b1,c1,a2,b2,c2;
+	int a,b,c,temp1,temp2;
+	scanf("%d.%d.%d %d.%d.%d",&a1,&b1,&c1,&a2,&b2,&c2);
+	c=(c1+c2)%29;
+	temp1=(c1+c2)/29;
+	b=(b1+b2+temp1)%17;
+	temp2=(b1+b2+temp1)/17;
+	a=a1+a2+temp2;
+	printf("%d.%d.%d",a,b,c);
+	return 0;
+} 
