@@ -1,0 +1,25 @@
+//给三个数，判断前两个的和是不是大于第三个，因为给的数范围在long long int的范围内，所以可以讨巧地用正负来判断是否溢出
+#include<iostream>
+using namespace std;
+int main(){
+	int n;
+	cin>>n;
+	long long a,b,c,sum;
+	for(int i=1;i<=n;i++){
+		cin>>a>>b>>c;
+		sum=a+b;
+		if(a>0&&b>0&&sum<=0){
+			printf("Case #%d: true\n",i);
+		}
+		else if(a<0&&b<0&&sum>=0){
+			printf("Case #%d: false\n",i);
+		}
+		else if(sum>c){
+			printf("Case #%d: true\n",i);
+		}
+		else{
+			printf("Case #%d: false\n",i);
+		}
+	}
+	return 0;
+}
