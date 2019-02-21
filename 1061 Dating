@@ -1,0 +1,31 @@
+//做过的题，有些坑，不赘述了
+#include<iostream>
+using namespace std;
+int main(){
+	char week[7][4]={"MON","TUE","WED","THU","FRI","SAT","SUN"};
+	char a[4][65];
+	for(int i=0;i<4;i++){
+		scanf("%s",&a[i]);
+	}
+	int w=0;
+	while(a[0][w]<'A'||a[0][w]>'G'||a[0][w]!=a[1][w]){
+		w++;
+	}
+	printf("%s ",week[a[0][w]-'A']);
+	int h=w+1;
+	while(a[0][h]!=a[1][h]||a[0][h]<'0'||a[0][h]>'N'){
+		h++;
+	}
+	if(a[0][h]>='0'&&a[0][h]<='9'){
+		printf("%02d:",a[0][h]-'0');
+	}
+	else{
+		printf("%02d:",a[0][h]-'A'+10);
+	}
+	int m=0;
+	while(a[2][m]!=a[3][m]||a[2][m]<'A'||a[2][m]>'z'){
+		m++;
+	}
+	printf("%02d",m);
+	return 0;
+}
