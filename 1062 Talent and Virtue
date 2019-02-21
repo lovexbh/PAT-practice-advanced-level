@@ -1,0 +1,66 @@
+//做过的，排序题，没什么东西
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+struct human{
+	int id,virtue,talent;
+};
+bool cmp(human a,human b){
+	if((a.talent+a.virtue)!=(b.talent+b.virtue)){
+		return (a.talent+a.virtue)>(b.talent+b.virtue);
+	}
+	else if(a.virtue!=b.virtue){
+		return a.virtue>b.virtue;
+	}
+	else{
+		return a.id<b.id;
+	}
+}
+int main(){
+	vector<human> sage,nobleman,foolman,smallman;
+	int n,l,h;
+	scanf("%d %d %d",&n,&l,&h);
+	int ID,v,t;
+	for(int i=0;i<n;i++){
+		struct human temp;
+		scanf("%d %d %d",&ID,&v,&t);
+		temp.id=ID;
+		temp.virtue=v;
+		temp.talent=t;
+		if(v<l||t<l){
+			continue;
+		}
+		else if(t>=h&&v>=h){
+			sage.push_back(temp);
+		}
+		else if(v>=h&&t<h){
+			nobleman.push_back(temp);
+		}
+		else if(v<h&&t<h&&v>=t){
+			foolman.push_back(temp);
+		}
+		else{
+			smallman.push_back(temp);
+		}
+	}
+	sort(sage.begin(),sage.end(),cmp);
+	sort(nobleman.begin(),nobleman.end(),cmp);
+	sort(foolman.begin(),foolman.end(),cmp);
+	sort(smallman.begin(),smallman.end(),cmp);
+	int sum=sage.size()+nobleman.size()+smallman.size()+foolman.size();
+	printf("%d\n",sum);
+	for(int i=0;i<sage.size();i++){
+		printf("%08d %d %d\n",sage[i].id,sage[i].virtue,sage[i].talent);
+	}
+	for(int i=0;i<nobleman.size();i++){
+		printf("%08d %d %d\n",nobleman[i].id,nobleman[i].virtue,nobleman[i].talent);
+	}
+	for(int i=0;i<foolman.size();i++){
+		printf("%08d %d %d\n",foolman[i].id,foolman[i].virtue,foolman[i].talent);
+	}
+	for(int i=0;i<smallman.size();i++){
+		printf("%08d %d %d\n",smallman[i].id,smallman[i].virtue,smallman[i].talent);
+	}
+	return 0;
+}
