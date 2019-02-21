@@ -1,0 +1,51 @@
+//01背包问题，第一次见，参考了柳婼大神的代码和blog
+//01背包问题，因为要输出从小到大的排列，可以先把硬币面额从大到小排列，然后用bool类型的choice[i][j]数组dp[i][j]是否选取，
+//如果选取了就令choice为true；然后进行01背包问题求解，如果最后求解的结果不是恰好等于所需要的价值的，就输出No Soultion，
+//否则从choice[i][j]判断选取的情况，i从n到1表示从后往前看第i个物品的选取情况，j从m到0表示从容量m到0是否选取(j = j – w[i])，
+//把选取情况压入arr数组中，最后输出arr数组
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int dp[10010],w[10010];
+bool choice[10010][110];//第一维表示选取的硬币，第二维表示总和
+bool cmp(int a,int b){//从大到小排序
+	return a>b;
+}
+int main(){
+	int n,m;
+	scanf("%d %d",&n,&m);
+	for(int i=1;i<=n;i++){
+		scanf("%d",&w[i]);//注意编号从1开始
+	}
+	sort(w+1,w+n+1,cmp);
+	for(int i=1;i<=n;i++){//遍历所有硬币
+		for(int j=m;j>=w[i];j--){//从m开始减少总和
+			if(dp[j]<=dp[j-w[i]]+w[i]){//如果和能够更大或者是总和一样序列更小的话，更新选择。
+				choice[i][j]=true;
+				dp[j]=dp[j-w[i]]+w[i];
+			}
+		}
+	}
+	if(dp[m]!=m){
+		printf("No Solution");
+	}
+	else{
+		vector<int> arr;
+		int v=m,index=n;
+		while(v>0){
+			if(choice[index][v]==true){
+				arr.push_back(w[index]);
+				v-=w[index];
+			}
+			index--;
+		}
+		for(int i=0;i<arr.size();i++){
+			if(i!=0){
+				printf(" ");
+			}
+			printf("%d",arr[i]);
+		}
+	}
+	return 0;
+}
