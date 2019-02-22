@@ -1,0 +1,51 @@
+//乙级题，排序，注意double类型的计算
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+struct mooncake{
+	double price;
+	double total;
+};
+bool cmp(mooncake a,mooncake b){
+	if(a.price>b.price){
+		return true;
+	}
+	else{
+		return false;
+	}
+}
+int main(){
+	int n,t;
+	vector<mooncake> moon;
+	scanf("%d %d",&n,&t);
+	moon.reserve(n);
+	for(int i=0;i<n;i++){
+		double num;
+		scanf("%lf",&num);
+		moon[i].total=num;
+	}
+	for(int i=0;i<n;i++){
+		double p;
+		scanf("%lf",&p);
+		moon[i].price=(p/moon[i].total);
+	}
+	sort(moon.begin(),moon.begin()+n,cmp);
+	double sum=0.0;
+	int cnt=0;
+	int index=0;
+	while(cnt<t&&index<n){
+		if(cnt+moon[index].total<=t){
+			sum+=moon[index].total*moon[index].price;
+			cnt+=moon[index].total;
+			index++;
+		}
+		else{
+			sum+=(t-cnt)*moon[index].price;
+			cnt=t;
+			index++;
+		}
+	}
+	printf("%.2f",sum);
+	return 0;
+}
