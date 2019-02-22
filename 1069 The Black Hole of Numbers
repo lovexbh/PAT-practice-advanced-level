@@ -1,0 +1,62 @@
+//水题，限制了四位数，很好操作
+#include<iostream>
+#include<algorithm>
+#include<vector>
+#include<cmath>
+using namespace std;
+bool cmp1(int p,int q){
+	return p>q;
+}
+bool cmp2(int p,int q){
+	return p<q;
+}
+int down(int a){
+	vector<int> num;
+	int temp;
+	temp=a/1000;
+	num.push_back(temp);
+	a%=1000;
+	temp=a/100;
+	num.push_back(temp);
+	a%=100;
+	temp=a/10;
+	num.push_back(temp);
+	temp=a%10;
+	num.push_back(temp);
+	sort(num.begin(),num.end(),cmp1);
+	int ret;
+	ret=num[0]*1000+num[1]*100+num[2]*10+num[3];
+	return ret;
+}
+int up(int a){
+	vector<int> num;
+	int temp;
+	temp=a/1000;
+	num.push_back(temp);
+	a%=1000;
+	temp=a/100;
+	num.push_back(temp);
+	a%=100;
+	temp=a/10;
+	num.push_back(temp);
+	temp=a%10;
+	num.push_back(temp);
+	sort(num.begin(),num.end(),cmp2);
+	int ret;
+	ret=num[0]*1000+num[1]*100+num[2]*10+num[3];
+	return ret;
+}
+int main(){
+	int n;
+	cin>>n;
+	while(1){
+		int a=down(n);
+		int b=up(n);
+		n=a-b;
+		printf("%04d - %04d = %04d\n",a,b,n);
+		if(n==0||n==6174){
+			break;
+		}
+	}
+	return 0;
+} 
