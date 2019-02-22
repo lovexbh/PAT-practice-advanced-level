@@ -1,0 +1,36 @@
+//要求给出一长串字符中频率最高的单词，不限大小写
+//学到了几个新函数，cctype里的isalnum，可以判断是否是数字和字母，还有tolower函数，将大写变为小写
+//学到了一些对map的巧妙操作，可以用map对应的键值来存储数量
+#include<iostream>
+#include<cctype>
+#include<map>
+#include<cstring>
+using namespace std;
+string s,b;
+map<string,int> a;
+int main(){
+	getline(cin,s);
+	for(int i=0;i<s.length();i++){
+		if(isalnum(s[i])){
+			s[i]=tolower(s[i]);
+			b+=s[i];
+		}
+		if(!isalnum(s[i])||i==s.size()-1){
+			if(b!=""){
+				a[b]++;
+				b="";
+			}
+		}
+	}
+	map<string,int>:: iterator it;
+	int cnt=0; 
+	string t;
+	for(it = a.begin();it != a.end();it++){
+		if(it->second>cnt){
+			t=it->first;
+			cnt=it->second;
+		}
+	}
+	cout<<t<<" "<<cnt;
+	return 0;
+}
