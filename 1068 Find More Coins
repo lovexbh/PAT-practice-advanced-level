@@ -3,12 +3,17 @@
 //如果选取了就令choice为true；然后进行01背包问题求解，如果最后求解的结果不是恰好等于所需要的价值的，就输出No Soultion，
 //否则从choice[i][j]判断选取的情况，i从n到1表示从后往前看第i个物品的选取情况，j从m到0表示从容量m到0是否选取(j = j – w[i])，
 //把选取情况压入arr数组中，最后输出arr数组
+//可以把硬币看成w=v(即容量=价值)的物品，现在要选取这些物品放入到容量为m的背包中，求能装的最大价值。
+//如果最大价值恰好等于容量m，那么方案则是可行的，否则输出No Solution。
+//由于要输出排列最小的方案，所以先将硬币按价值从大到小排列，相当于我先装大的，再装小的。
+//接着用01背包的方法求dp[j]。
+//chosen[i][j]数组表示背包里容量为j的时候，是否含有第i个物品，用于最后序列的输出。
 #include<iostream>
 #include<vector>
 #include<algorithm>
 using namespace std;
 int dp[10010],w[10010];
-bool choice[10010][110];//第一维表示选取的硬币，第二维表示总和
+bool choice[10010][110];//第一维表示选取的硬币，第二维表示背包的容量，这里认为硬币的体积和价值一样
 bool cmp(int a,int b){//从大到小排序
 	return a>b;
 }
@@ -20,9 +25,9 @@ int main(){
 	}
 	sort(w+1,w+n+1,cmp);
 	for(int i=1;i<=n;i++){//遍历所有硬币
-		for(int j=m;j>=w[i];j--){//从m开始减少总和
-			if(dp[j]<=dp[j-w[i]]+w[i]){//如果和能够更大或者是总和一样序列更小的话，更新选择。
-				choice[i][j]=true;
+		for(int j=m;j>=w[i];j--){//背包容量从m开始减少
+			if(dp[j]<=dp[j-w[i]]+w[i]){//为了使背包中的物品价值最大化，第i件物品应该放入背包中吗，注意这里对每个容量的背包都进行一次判断
+				choice[i][j]=true;//这样就可以把不同种的方案全选出来
 				dp[j]=dp[j-w[i]]+w[i];
 			}
 		}
@@ -32,7 +37,7 @@ int main(){
 	}
 	else{
 		vector<int> arr;
-		int v=m,index=n;
+		int v=m,index=n;//从最小的开始减，直到减完为止，减到最后肯定是最小的一组序列
 		while(v>0){
 			if(choice[index][v]==true){
 				arr.push_back(w[index]);
