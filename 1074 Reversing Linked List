@@ -1,0 +1,52 @@
+//反转链表，没什么难的，最后一个测试点有个坑，输出总数不一定等于n
+#include<iostream>
+#include<vector>
+using namespace std;
+struct node{
+	int addr,next,val;
+};
+int main(){
+	struct node list[100001];
+	int n,r,begin;
+	scanf("%d %d %d",&begin,&n,&r);
+	for(int i=0;i<n;i++){
+		int a,v,nxt;
+		scanf("%d %d %d",&a,&v,&nxt);
+		if(a>=0){
+			list[a].val=v;
+			list[a].addr=a;
+			list[a].next=nxt;
+		}
+	}
+	vector<node> start,end;
+	int save=begin;
+	while(begin!=-1){
+		start.push_back(list[begin]);
+		begin=list[begin].next;
+	}
+	n=start.size();
+	for(int i=0;i<(n/r);i++){
+		for(int j=0;j<r;j++){
+			end.push_back(start[r*i+r-1-j]);
+			if(end.size()>1){
+				int k=end.size()-2;
+				end[k].next=end[k+1].addr;
+			}
+		}
+	}
+	if(n%r==0){
+		end[end.size()-1].next=-1;
+	}
+	else{
+		for(int i=n-n%r;i<start.size();i++){
+			end.back().next=start[i].addr;
+			end.push_back(start[i]);
+		}
+		end[end.size()-1].next=-1;
+	}
+	for(int i=0;i<end.size()-1;i++){
+		printf("%05d %d %05d\n",end[i].addr,end[i].val,end[i].next);
+	}
+	printf("%05d %d %d",end[end.size()-1].addr,end[end.size()-1].val,end[end.size()-1].next);
+	return 0;
+}
