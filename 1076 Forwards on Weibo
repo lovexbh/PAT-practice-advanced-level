@@ -1,0 +1,55 @@
+//给出微博每个人的关注列表，以及最多的转发层数，输入询问对象，要求输出每个询问对象的最多转发次数
+//一开始是dfs做的，后来有两个测试点错误，就发现了问题，如果一个点在多个人的关注列表出现，可能他本身层数较高，但是在某个较长路径中被访问，导致
+//它的孩子未被访问，所以错误，这里学习了柳婼大神的bfs算法
+#include <cstdio>
+#include <queue>
+#include <vector>
+using namespace std;
+int n, l, m, k;
+struct node {
+    int id, layer;
+};
+vector<vector<int>> v;
+int bfs(node tnode) {
+    bool inq[1010] = {false};//访问数组初始化
+    queue<node> q;
+    q.push(tnode);
+    inq[tnode.id] = true;
+    int cnt = 0;
+    while(!q.empty()) {//核心思路是先把一个点所有的孩子放到队列里去，再慢慢压出，这样不会造成次序混乱
+        node top = q.front();
+        q.pop();
+        int topid = top.id;
+        for(int i = 0; i < v[topid].size(); i++) {
+            int nextid = v[topid][i];
+            if(inq[nextid] == false && top.layer < l) {
+                node next = {nextid, top.layer + 1};
+                q.push(next);
+                inq[next.id] = true;
+                cnt++;
+            }
+        }
+    }
+    return cnt;
+}
+ 
+int main() {
+    scanf("%d %d", &n, &l);
+    v.resize(n + 1);
+    for(int i = 1; i <= n; i++) {
+        scanf("%d", &m);
+        for(int j = 0; j < m; j++) {
+            int temp;
+            scanf("%d", &temp);
+            v[temp].push_back(i);
+        }
+    }
+    scanf("%d", &k);
+    int tid;
+    for(int i = 0; i < k; i++) {
+        scanf("%d", &tid);
+        node tnode = {tid, 0};
+        printf("%d\n", bfs(tnode));
+    }
+    return 0;
+}
