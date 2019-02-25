@@ -1,0 +1,66 @@
+//先排序再判断，注意输出的学生id也要排序，一开始没注意错在这里
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+struct app{
+	int id,ge,gi,total;
+	int prefer[5];
+};
+bool cmp(app a,app b){
+	if(a.total!=b.total){
+		return a.total>b.total;
+	}
+	else{
+		return a.ge>b.ge;
+	}
+}
+bool cmp1(int a,int b){
+	return a<b;
+}
+vector<app> ans;
+vector<int> counts[100];
+int main(){
+	int n,m,k;
+	scanf("%d %d %d",&n,&m,&k);
+	int maxaddmission[100];
+	ans.resize(n);
+	for(int i=0;i<m;i++){
+		scanf("%d",&maxaddmission[i]);
+	}
+	for(int i=0;i<n;i++){
+		scanf("%d %d",&ans[i].ge,&ans[i].gi);
+		for(int j=0;j<k;j++){
+			scanf("%d",&ans[i].prefer[j]);
+		}
+		ans[i].id=i;
+		ans[i].total=ans[i].ge+ans[i].gi;
+	}
+	sort(ans.begin(),ans.end(),cmp);
+	for(int i=0;i<ans.size();i++){
+		for(int j=0;j<k;j++){
+			int z=ans[i].prefer[j];
+			if(counts[z].size()<maxaddmission[z]){
+				counts[z].push_back(ans[i].id);
+				break;
+			}
+			else if(i>0){
+				if(ans[i].total==ans[i-1].total&&ans[i].ge==ans[i-1].ge&&counts[z].back()==ans[i-1].id){
+					counts[z].push_back(ans[i].id);
+					break;
+				}
+			}
+		}
+	}
+	for(int i=0;i<m;i++){
+		sort(counts[i].begin(),counts[i].end(),cmp1);
+		for(int j=0;j<counts[i].size();j++){
+			if(j!=0){
+				printf(" ");
+			}
+			printf("%d",counts[i][j]);
+		}
+		printf("\n");
+	}
+	return 0;
+}
