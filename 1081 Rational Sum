@@ -1,0 +1,66 @@
+//分数求和问题，辗转相除法复习，注意longlongint
+#include<iostream>
+using namespace std;
+long long int ans[2]={0,0};
+long long int findzdgys(long long int p,long long int q){
+	long long int temp;
+	if(p==0){
+		return q;
+	}
+	while(q!=0){
+		if(p>q){
+			temp=p;
+			p=q;
+			q=temp;
+		}
+		q%=p;
+	}
+	return p;
+}
+void sum(long long int z,long long int x){
+	long long int temp1=z*ans[1]+x*ans[0];
+	long long int temp2=x*ans[1];
+	long long int k=findzdgys(temp1,temp2);
+	ans[0]=temp1/k;
+	ans[1]=temp2/k;
+}
+int main(){
+	int n;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		long long int a,b;
+		scanf("%lld/%lld",&a,&b);
+		if(i==0){
+			ans[0]=a;
+			ans[1]=b;
+		}
+		else{
+			sum(a,b);
+		}
+	}
+	if(ans[1]<0){
+		ans[1]*=-1;
+		ans[0]*=-1;
+	}
+	if(ans[0]==0){
+		printf("0");
+	}
+	else{
+		if(ans[0]<0){
+			printf("-");
+			ans[0]=-ans[0];
+		}
+		long long int g=ans[0]/ans[1];
+		ans[0]=ans[0]%ans[1];
+		if(g!=0){
+			printf("%lld",g);
+			if(ans[0]!=0){
+				printf(" ");
+			}
+		}
+		if(ans[0]!=0){
+			printf("%lld/%lld",ans[0],ans[1]);
+		}
+	}
+	return 0;
+}
