@@ -1,0 +1,32 @@
+//找若干字符串的公共子串，考察字符串操作。让ans一开始等于s1，然后不断匹配直到不同，相同的部分substr（）
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+	int n;
+	cin>>n;
+	getchar();
+	string s1,s;
+	getline(cin,s1);
+	int len1,len2;
+	for(int i=0;i<n-1;i++){
+		getline(cin,s);
+		len2=s.length();
+		len1=s1.length();
+		int index=0;
+		while(index<len1&&index<len2){
+			if(s1[len1-1-index]!=s[len2-1-index]){
+				break;
+			}
+			index++;
+		}
+		s1=s1.substr(len1-index);
+	}
+	if(s1.empty()){
+		cout<<"nai";
+	}
+	else{
+		cout<<s1;
+	}
+	return 0;
+} 
