@@ -1,0 +1,43 @@
+//水题
+#include<cstdio>
+#include<iostream>
+#include<string.h>
+#include<string>
+#include<vector>
+#include<algorithm>
+using namespace std;
+int main()
+{
+	bool hashtable[128] = {false};
+	string s1, s2;
+	cin >> s1 >> s2;
+	int i, j; i = j = 0;
+	while (i < s1.size() && j < s2.size())
+	{
+		if (s1[i] >= 'a'&&s1[i] <= 'z')s1[i] -= 32;
+		if (s2[j] >= 'a'&&s2[j] <= 'z')s2[j] -= 32;
+		if (s1[i] != s2[j])
+		{
+			if (!hashtable[s1[i]])
+			{
+				cout << s1[i]; 
+				hashtable[s1[i]] = true;
+			}
+			i++; 
+		}
+		else
+		{
+			i++; j++;
+		}
+	}
+	for (int k = i; k < s1.size(); k++)
+	{
+		if (s1[k] >= 'a'&&s1[k] <= 'z')s1[k] -= 32;
+		if(!hashtable[s1[k]])
+		{
+			cout << s1[k];
+			hashtable[s1[k]] = true;
+		}
+	}
+	return 0;
+}
