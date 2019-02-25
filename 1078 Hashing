@@ -1,0 +1,57 @@
+//找素数加哈希表考点
+//然后根据二次方探查法： 如果hashTable里面key % size的下标对应的hashTable为false,说明这个下标没有被使用过，
+//直接输出。否则step步长从1加到size-1，一次次尝试是否能使index = (key + step * step) % size;所对应的位置没有元素，
+//如果都没有找到就输出“-”，否则就输出这个找到的元素的位置～
+//新学习二次方探查法
+#include<iostream>
+#include<cmath>
+using namespace std;
+int a,b;
+int hashtable[100000];
+bool isprime(int n){
+	if(n==1||n==0){
+		return false;
+	}
+	if(n==2||n==3){
+		return true;
+	}
+	for(int i=2;i<=sqrt(n);i++){
+		if(n%i==0){
+			return false;
+		}
+	}	
+	return true;
+}
+int findprime(int n){
+	int ret=n;
+	while(!isprime(ret)){
+		ret++;
+	}
+	return ret;
+}
+void insert(int p){
+	for(int i=0;i<a;i++){
+		int k=(p+i*i)%a;
+		if(hashtable[k]==0){
+			hashtable[k]=1;
+			printf("%d",k);
+			return;
+		} 
+	}
+	printf("-");
+	return;
+}
+int main(){
+	fill(hashtable,hashtable+100000,0);
+	scanf("%d %d",&a,&b);
+	a=findprime(a);
+	for(int i=0;i<b;i++){
+		int num;
+		scanf("%d",&num);
+		insert(num);
+		if(i!=b-1){
+			printf(" ");
+		}
+	}
+	return 0;
+}
