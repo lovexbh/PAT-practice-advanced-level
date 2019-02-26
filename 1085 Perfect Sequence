@@ -1,0 +1,48 @@
+//排序加二分查找，注意longlongint问题
+#include<iostream>
+#include<algorithm>
+#include<vector>
+using namespace std;
+vector<long long int> num;
+bool cmp(int a,int b){
+	return a<b;
+}
+long long int findthenum(long long int a){
+	int l=0;
+	int r=num.size()-1;
+	while(l<r){
+		int mid=(l+r)/2;
+		if(num[mid]>a){
+			r=mid;
+		}
+		else{
+			l=mid+1;
+		}
+	}
+	if(num[l]<=a){
+		return l+1;
+	}
+	else{
+		return l;
+	}
+}
+int main(){
+	int a,b;
+	int maxn=0;
+	scanf("%d %d",&a,&b);
+	for(int i=0;i<a;i++){
+		long long int n;
+		scanf("%lld",&n);
+		num.push_back(n);
+	}
+	sort(num.begin(),num.end(),cmp);
+	for(int i=0;i<a;i++){
+		long long int k=num[i]*b;
+		int index=findthenum(k);
+		if(index-i+1>maxn){
+			maxn=index-i;
+		}
+	}
+	printf("%d",maxn);
+	return 0;
+}
