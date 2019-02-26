@@ -1,0 +1,105 @@
+//dfs题带权值，老生常谈了
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+int change(string s){
+	int ret=0;
+	ret+=(s[2]-'A');
+	ret+=(s[1]-'A')*26;
+	ret+=(s[0]-'A')*26*26;
+	return ret;
+}
+int goal=change("ROM");
+bool v[18000];
+int road[18000][18000];
+int happiness[18000];
+vector<int> help[18000];
+int minc=99999999,cnt,h=0,city=0,flag=0;
+vector<int> route;
+int r[300];
+void dfs(int cur,int cost,int happy,int length){
+	if(cost>minc){
+		return;
+	}
+	route.push_back(cur);
+	if(cur==goal){
+		if(cost<minc){
+			minc=cost;
+			cnt=1;
+			h=happy;
+			city=length;
+			flag=1;
+		}
+		else if(cost==minc){
+			cnt++;
+			if(happy>h){
+				h=happy;
+				city=length;
+				flag=1;
+			}
+			else if(happy==h){
+				if(city>length){
+					city=length;
+					flag=1;
+				}
+			}
+		}
+		if(flag){
+			for(int i=0;i<route.size();i++){
+				r[i]=route[i];
+			}
+			flag=0;
+		}
+	}
+	v[cur]=true;
+	for(int i=0;i<help[cur].size();i++){
+		int nxt=help[cur][i];
+		if(!v[nxt]){
+			dfs(nxt,cost+road[cur][nxt],happy+happiness[nxt],length+1);
+		}
+	}
+	v[cur]=false;
+	route.pop_back();
+}
+void out(int w){
+	char c=w/(26*26)+'A';
+	w%=(26*26);
+	printf("%c",c);
+	c=w/26+'A';
+	w%=26; 
+	printf("%c",c);
+	c=w+'A';
+	printf("%c",c);
+	return;
+}
+int main(){
+	int n,m,begin;
+	char name[4],p[4],q[4];
+	scanf("%d %d %s",&n,&m,&name);
+	begin=change(name);
+	for(int i=0;i<n-1;i++){
+		int num,t;
+		scanf("%s %d",&name,&num);
+		t=change(name);
+		happiness[t]=num;
+	}
+	for(int i=0;i<m;i++){
+		int len,a,b;
+		scanf("%s %s %d",&p,&q,&len);
+		a=change(p);
+		b=change(q);
+		road[a][b]=road[b][a]=len;
+		help[a].push_back(b);
+		help[b].push_back(a);
+	}
+	dfs(begin,0,0,0);
+	printf("%d %d %d %d\n",cnt,minc,h,h/city);
+	for(int i=0;i<=city;i++){
+		if(i!=0){
+			printf("->");
+		}
+		out(r[i]);
+	}
+	return 0;
+} 
