@@ -1,0 +1,41 @@
+//dfs题，很水
+#include<iostream>
+#include<vector>
+using namespace std;
+int n,m;
+int maxs=0,l;
+vector<int> road[110];
+bool v[110];
+int total[110];
+void dfs(int cur,int level){
+	v[cur]=1;
+	total[level]++;
+	for(int i=0;i<road[cur].size();i++){
+		int nxt=road[cur][i];
+		if(!v[nxt]){
+			dfs(nxt,level+1);
+		}
+	}
+	return;
+}
+int main(){
+	scanf("%d %d",&n,&m);
+	fill(total,total+110,0);
+	for(int i=0;i<m;i++){
+		int id,k,num;
+		scanf("%d %d",&id,&k);
+		for(int j=0;j<k;j++){
+			scanf("%d",&num);
+			road[id].push_back(num);
+		}
+	}
+	dfs(1,1);
+	for(int i=1;i<110;i++){
+		if(total[i]>maxs){
+			maxs=total[i];
+			l=i;
+		}
+	}
+	printf("%d %d",maxs,l);
+	return 0;
+}
