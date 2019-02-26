@@ -1,0 +1,87 @@
+//除了烦没别的东西，所以要细致
+#include <iostream>
+#include <algorithm>
+typedef long long ll;
+using namespace std;
+struct rational{
+	ll nu,de;
+}r1,r2;
+ll gcd(ll a,ll b){
+	if(b==0) return a;
+	return gcd(b,a%b);
+}
+void simplify(rational &r){
+	if(r.de<0){
+		r.nu=-r.nu;
+		r.de=-r.de;
+	}
+	if(r.nu==0) r.de=1;
+	ll g=gcd(abs(r.de),abs(r.nu));
+	r.de/=g;
+	r.nu/=g;
+}
+void print(rational r){
+	if(r.nu==0){
+		printf("0");
+		return;
+	}
+	if(r.nu<0) printf("(-");
+	if(abs(r.nu)/r.de!=0&&abs(r.nu)%r.de!=0) printf("%d %d/%d",abs(r.nu)/r.de,abs(r.nu)%r.de,r.de);
+	else if(abs(r.nu)/r.de!=0&&abs(r.nu)%r.de==0) printf("%d",abs(r.nu)/r.de);
+	else if(abs(r.nu)/r.de==0) printf("%d/%d",abs(r.nu),r.de);
+	if(r.nu<0) printf(")");
+}
+rational add(rational r1,rational r2){
+	rational sum;
+	sum.de=r1.de*r2.de;
+	sum.nu=r1.de*r2.nu+r1.nu*r2.de;
+	simplify(sum);
+	print(sum);
+	printf("\n");
+}
+rational product(rational r1,rational r2){
+	rational ans;
+	ans.de=r1.de*r2.de;
+	ans.nu=r2.nu*r1.nu;
+	simplify(ans);
+	print(ans);
+	printf("\n");
+}
+int main(){
+	//freopen("g:\\in.txt","r",stdin);
+	scanf("%lld/%lld %lld/%lld",&r1.nu,&r1.de,&r2.nu,&r2.de);
+	simplify(r1);
+	simplify(r2);
+	print(r1);
+	printf(" + ");
+	print(r2);
+	printf(" = ");
+	add(r1,r2);
+	
+	print(r1);
+	printf(" - ");
+	print(r2);
+	printf(" = ");
+	rational r3=r2;
+	r3.nu=-r3.nu;
+	add(r1,r3);
+	
+	print(r1);
+	printf(" * ");
+	print(r2);
+	printf(" = ");
+	product(r1,r2);
+	
+	print(r1);
+	printf(" / ");
+	print(r2);
+	printf(" = ");
+	if(r2.nu==0) printf("Inf");
+	else{
+		ll temp=r2.de;
+		r2.de=r2.nu;
+		r2.nu=temp;
+		product(r1,r2);
+	}
+	return 0;
+}
