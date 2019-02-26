@@ -1,0 +1,44 @@
+//很水的dfs题，和之前那一道题差不多
+#include<iostream>
+#include<vector>
+using namespace std;
+int n,cnt;
+vector<int> road[100010];
+bool v[100010];
+double maxp=0.0;
+double rate;
+void dfs(int cur,double price){
+	v[cur]=true;
+	if(price>maxp){
+		maxp=price;
+		cnt=1;
+	}
+	else if(price==maxp){
+		cnt++;
+	}
+	for(int i=0;i<road[cur].size();i++){
+		int nxt=road[cur][i];
+		if(!v[nxt]){
+			dfs(nxt,price*(1+rate/100.0));
+		}
+	}
+	return ;
+}
+int main(){
+	int start;
+	double begin;
+	scanf("%d %lf %lf",&n,&begin,&rate);
+	for(int i=0;i<n;i++){
+		int index;
+		scanf("%d",&index);
+		if(index==-1){
+			start=i;
+		}
+		else{
+			road[index].push_back(i);
+		}
+	}
+	dfs(start,begin);
+	printf("%.2f %d",maxp,cnt);
+	return 0;
+} 
