@@ -1,0 +1,45 @@
+//整个哈希表，记录每个A的位置前面P的数量和后面T的数量，时间复杂度是2n
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+	long long int sum=0;
+	int p[100001],t[100001];
+	fill(p,p+100001,0);
+	fill(t,t+100001,0);
+	string s;
+	int len,index=0;
+	cin>>s;
+	len=s.length();
+	while(s[index]!='P'&&index<len){
+		index++;
+	}
+	s=s.substr(index);
+	len=s.length();
+	int cnt=0;
+	for(int i=0;i<len;i++){
+		if(s[i]=='P'){
+			cnt++;
+		}
+		else if(s[i]=='A'){
+			p[i]=cnt;
+		}
+	}
+	cnt=0;
+	for(int i=0;i<len;i++){
+		if(s[len-i-1]=='T'){
+			cnt++;
+		}
+		else if(s[len-i-1]=='A'){
+			t[len-i-1]=cnt;
+		}
+	}
+	for(int i=0;i<100001;i++){
+		if(p[i]>0&&t[i]>0){
+			sum+=p[i]*t[i];
+		}
+	}
+	sum%=1000000007;
+	cout<<sum;
+	return 0;
+}
