@@ -1,0 +1,44 @@
+//push的顺序是先序，pop的顺序是中序，相当于已知先序中序求后序，终于自己写了一回
+#include<iostream>
+#include<vector>
+#include<string>
+using namespace std;
+vector<int> in,post,temp,pre;
+void postorder(int root,int start,int end){
+	if(start>end){
+		return;
+	}
+	int i=start;
+	while(i<end&&in[i]!=pre[root]){
+		i++;
+	}
+	postorder(root+1,start,i-1);
+	postorder(i+1+root-start,i+1,end);
+	post.push_back(pre[root]);
+}
+int main(){
+	int n;
+	cin>>n;
+	string s;
+	int num;
+	for(int i=0;i<2*n;i++){
+		cin>>s;
+		if(s[1]=='u'){
+			cin>>num;
+			temp.push_back(num);
+			pre.push_back(num);
+		}
+		else{
+			in.push_back(temp.back());
+			temp.pop_back();
+		}
+	}
+	postorder(0,0,n-1);
+	for(int i=0;i<n;i++){
+		cout<<post[i];
+		if(i<n-1){
+			cout<<" ";
+		}
+	}
+	return 0;
+}
