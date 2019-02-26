@@ -1,0 +1,36 @@
+//水题，注意细节即可
+#include<iostream>
+#include<string>
+using namespace std;
+int main(){
+	string s1,s2;
+	cin>>s1>>s2;
+	int cnt=0,flag=1;
+	int len1=s1.length();
+	int len2=s2.length();
+	int num[200];
+	for(int i=0;i<200;i++){
+		num[i]=0;
+	}
+	for(int i=0;i<len2;i++){
+		int key=s2[i]-'\0';
+		num[key]++;
+	}
+	for(int i=0;i<len1;i++){
+		int key=s1[i]-'\0';
+		num[key]--;
+	}
+	for(int i=0;i<200;i++){
+		if(num[i]>0){
+			flag=0;
+			cnt+=num[i];
+		}
+	}
+	if(flag){
+		cout<<"Yes "<<(len1-len2);
+	}
+	else{
+		cout<<"No "<<cnt;
+	}
+	return 0;
+} 
