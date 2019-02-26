@@ -1,0 +1,46 @@
+//水题，注意几个特殊情况
+#include<iostream>
+#include<vector>
+#include<cmath>
+using namespace std;
+int n;
+int maxc=0;
+int index;
+int findmx(int a){
+	int ret=0;
+	int temp=n;
+	int b=a;
+	while(temp%b==0){
+		ret++;
+		temp/=b;
+		b++;
+	}
+	return ret;
+}
+int main(){
+	scanf("%d",&n);
+	if(n<4){
+		printf("1\n%d",n);
+		return 0;
+	}
+	for(int i=2;i<=sqrt(n);i++){
+		int k=findmx(i);
+		if(k>maxc){
+			maxc=k;
+			index=i;
+		}
+	}
+	if(maxc==0){
+		printf("1\n%d",n);
+	}
+	else{
+		printf("%d\n",maxc);
+	}
+	for(int i=0;i<maxc;i++){
+		if(i!=0){
+			printf("*");
+		}
+		printf("%d",index+i);
+	}
+	return 0;
+}
