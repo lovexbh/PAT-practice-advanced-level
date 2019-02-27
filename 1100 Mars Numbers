@@ -1,0 +1,87 @@
+//有点烦，用map，外加注意十三的整数倍的情况
+#include<iostream>
+#include<string>
+#include<map>
+using namespace std;
+int main(){
+	map<int,string> p1,p2;
+	map<string,int> q1,q2;
+	p1[0]="tret";
+	p1[1]="jan";
+	p1[2]="feb";
+	p1[3]="mar";
+	p1[4]="apr";
+	p1[5]="may";
+	p1[6]="jun";
+	p1[7]="jly";
+	p1[8]="aug";
+	p1[9]="sep";
+	p1[10]="oct";
+	p1[11]="nov";
+	p1[12]="dec";
+	for(int i=0;i<13;i++){
+		q1[p1[i]]=i;
+	}
+	p2[1]="tam";
+	p2[2]="hel";
+	p2[3]="maa";
+	p2[4]="huh";
+	p2[5]="tou";
+	p2[6]="kes";
+	p2[7]="hei";
+	p2[8]="elo";
+	p2[9]="syy";
+	p2[10]="lok";
+	p2[11]="mer";
+	p2[12]="jou";
+	for(int i=1;i<13;i++){
+		q2[p2[i]]=i;
+	}
+	int n;
+	string s;
+	cin>>n;
+	getchar();
+	for(int i=0;i<n;i++){
+		getline(cin,s);
+		if(s[0]>='0'&&s[0]<='9'){
+			int num=stoi(s);
+			int a,b;
+			a=num/13;b=num%13;
+			if(a>0&&b>0){
+				cout<<p2[a]<<" "<<p1[b]<<endl;
+			}
+			else if(a>0&&b==0){
+				cout<<p2[a]<<endl;
+			}
+			else if(a==0){
+				cout<<p1[b]<<endl;
+			}
+		}
+		else{
+			string s1,s2;
+			int index=0;
+			int len=s.length();
+			while(s[index]!=' '&&index<len){
+				index++;
+			}
+			if(index==len){
+				if(q1.find(s)==q1.end()){
+					cout<<q2[s]*13<<endl;
+				}
+				else{
+					cout<<q1[s]<<endl;
+				}
+			}
+			else{
+				s1=s.substr(0,index);
+				s2=s.substr(index+1);
+				int a,b,sum;
+				a=q2[s1];
+				b=q1[s2];
+				sum=a*13+b;
+				cout<<sum<<endl;
+			}
+		}
+	}
+	return 0;
+} 
