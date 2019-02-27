@@ -1,0 +1,43 @@
+//先把题目给的乱序数列升序排列，然后比对，合法的数字在两个数列中的位置是一样的，然后对遍历一遍数列，同时更新左边的max，对每个可能合法的位置
+//只要大于左边的max就一定是合法的，因为比它大的数和比它小的数数量都是固定的
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+bool cmp(int a,int b){
+	return a<b;
+}
+int main(){
+	int n;
+	vector<int> save,temp,ans;
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		int num;
+		scanf("%d",&num);
+		temp.push_back(num);
+		save.push_back(num);
+	}
+	sort(temp.begin(),temp.end(),cmp);
+	int maxt=0;
+	for(int i=0;i<n;i++){
+		if(temp[i]==save[i]&&temp[i]>maxt){
+			ans.push_back(temp[i]);
+		}
+		if(save[i]>maxt){
+			maxt=save[i];
+		}
+	}
+	if(ans.size()==0){
+		printf("0\n\n");
+	}
+	else{
+		printf("%d\n",ans.size());
+		for(int i=0;i<ans.size();i++){
+			if(i!=0){
+				printf(" ");
+			}
+			printf("%d",ans[i]);
+		}
+	}
+	return 0;
+}
