@@ -1,0 +1,55 @@
+//把链表里第一次出现的值输出一行，被移除的也输出一行，水题
+#include<iostream>
+#include<vector>
+#include<cmath>
+using namespace std;
+struct node{
+	int add,next,key;
+};
+int main(){
+	bool hashtable[10001];
+	struct node save[100001];
+	vector<node> temp,ans,remove;
+	int a,n;
+	scanf("%d %d",&a,&n);
+	for(int i=0;i<n;i++){
+		int addr,k,nxt;
+		scanf("%d %d %d",&addr,&k,&nxt);
+		save[addr].add=addr;
+		save[addr].key=k;
+		save[addr].next=nxt;
+	}
+	while(a!=-1){
+		temp.push_back(save[a]);
+		a=save[a].next;
+	}
+	for(int i=0;i<temp.size();i++){
+		int num=abs(temp[i].key);
+		if(hashtable[num]==false){
+			ans.push_back(temp[i]);
+			hashtable[num]=true;
+		}
+		else{
+			remove.push_back(temp[i]);
+		}
+	}
+	for(int i=0;i<ans.size();i++){
+		printf("%05d %d ",ans[i].add,ans[i].key);
+		if(i<ans.size()-1){
+			printf("%05d\n",ans[i+1].add);
+		}
+		else{
+			printf("-1\n");
+		}
+	}
+	for(int i=0;i<remove.size();i++){
+		printf("%05d %d ",remove[i].add,remove[i].key);
+		if(i<remove.size()-1){
+			printf("%05d\n",remove[i+1].add);
+		}
+		else{
+			printf("-1\n");
+		}
+	}
+	return 0;
+}
