@@ -1,0 +1,60 @@
+//做过的题目，再写一遍，还是有点烦
+#include<iostream>
+#include<vector>
+#include<algorithm>
+#include<cstring>
+#include<cmath>
+using namespace std;
+struct human{
+	char name[9];
+	int height;
+};
+bool cmp(human a,human b){
+	if(a.height!=b.height){
+		return a.height>b.height;
+	}
+	else{
+		return (strcmp(a.name,b.name)<0);
+	}
+}
+int main(){
+	int n,k;
+	vector<human> save;
+	scanf("%d %d",&n,&k);
+	for(int i=0;i<n;i++){
+		struct human temp;
+		scanf("%s %d",&temp.name,&temp.height);
+		save.push_back(temp);
+	}
+	sort(save.begin(),save.end(),cmp);
+	vector<vector<human>> num;
+	vector<human> te(10001);
+	num.resize(10,te);
+	int special=n/k+n%k;
+	int normal=n/k;
+	for(int i=0;i<special;i++){
+		num[0][special/2+1+((i+1)/2)*pow(-1,i)]=save[i];
+	}
+	for(int i=1;i<k;i++){
+		for(int j=0;j<normal;j++){
+			num[i][normal/2+1+((j+1)/2)*pow(-1,j)]=save[special+(i-1)*normal+j];
+		}
+	}
+	for(int i=1;i<=special;i++){
+		if(i!=1){
+			printf(" ");
+		}
+		printf("%s",num[0][i].name);
+	}
+	printf("\n");
+	for(int i=1;i<k;i++){
+		for(int j=1;j<=normal;j++){
+			if(j!=1){
+				printf(" ");
+			}
+			printf("%s",num[i][j].name);
+		}
+		printf("\n");
+	}
+	return 0;
+}
