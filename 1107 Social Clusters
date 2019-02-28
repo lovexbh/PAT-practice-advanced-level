@@ -1,0 +1,57 @@
+//map和dfs题，作为30分题来说不难，不过还是写了蛮久的
+#include<iostream>
+#include<vector>
+#include<algorithm>
+using namespace std;
+vector<int> hobby[1010],human[1010];
+vector<int> ans;
+int cnt=0;
+bool v[1010];
+int n,k,sum;
+bool cmp(int a,int b){
+	return a>b;
+}
+void dfs(int cur){
+	v[cur]=true;
+	sum++;
+	for(int i=0;i<human[cur].size();i++){
+		for(int j=0;j<hobby[human[cur][i]].size();j++){
+			int nxt=hobby[human[cur][i]][j];
+			if(!v[nxt]){
+				dfs(nxt);
+			}
+		}
+	}
+	return;
+}
+int main(){
+	scanf("%d",&n);
+	for(int i=0;i<n;i++){
+		int num;
+		scanf("%d:",&k);
+		for(int j=0;j<k;j++){
+			scanf("%d",&num);
+			hobby[num].push_back(i);
+			human[i].push_back(num);
+		}
+	}
+	int index=0;
+	while(index<n){
+		if(!v[index]){
+			sum=0;
+			dfs(index);
+			cnt++;
+			ans.push_back(sum);
+		}
+		index++;
+	}
+	sort(ans.begin(),ans.end(),cmp);
+	printf("%d\n",cnt);
+	for(int i=0;i<cnt;i++){
+		if(i!=0){
+			printf(" ");
+		}
+		printf("%d",ans[i]);
+	}
+	return 0;
+}
